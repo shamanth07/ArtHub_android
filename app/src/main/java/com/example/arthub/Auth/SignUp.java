@@ -101,6 +101,9 @@ public class SignUp extends AppCompatActivity {
                             .addOnCompleteListener(userTask -> {
                                 if (userTask.isSuccessful()) {
                                     Toast.makeText(this, "Signed up as " + role, Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(this,SignIn.class);
+                                    startActivity(intent);
+                                    finish();
                                 } else {
                                     Toast.makeText(this, "Failed to save user info", Toast.LENGTH_SHORT).show();
                                 }

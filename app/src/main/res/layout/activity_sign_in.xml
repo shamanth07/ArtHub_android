@@ -61,15 +61,29 @@
             android:textColor="@android:color/white"
             android:layout_marginBottom="16dp" />
 
+        <TextView
+            android:id="@+id/forgetpassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:text="ForgotPassword..?"
+            android:textStyle="bold"
+            android:clickable="true"
+            android:layout_marginEnd="100dp"
+            />
+
 
         <TextView
             android:id="@+id/signUpLink"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="85dp"
             android:text="Don't have an account? Sign up"
             android:textColor="@color/red"
             android:clickable="true"
             android:focusable="true"
-            android:visibility="visible" />
+            android:visibility="visible"
+            android:layout_marginHorizontal="300dp"
+            />
     </LinearLayout>
 </ScrollView>

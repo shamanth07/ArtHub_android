@@ -19,7 +19,7 @@ public class SignIn extends AppCompatActivity {
     Spinner roleSpinner;
     EditText emailInput, passwordInput;
     Button signInButton;
-    TextView signUpLink;
+    TextView signUpLink,forgetpassword;
 
     String[] roles = {"Visitor", "Artist", "Admin"};
 
@@ -36,6 +36,7 @@ public class SignIn extends AppCompatActivity {
         passwordInput = findViewById(R.id.passwordInput);
         signInButton = findViewById(R.id.signInButton);
         signUpLink = findViewById(R.id.signUpLink);
+        forgetpassword = findViewById(R.id.forgetpassword);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, roles);
@@ -54,6 +55,10 @@ public class SignIn extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        forgetpassword.setOnClickListener(v -> {
+            startActivity(new Intent(SignIn.this, ForgetPassword.class));
         });
 
         signInButton.setOnClickListener(view -> {
@@ -102,6 +107,8 @@ public class SignIn extends AppCompatActivity {
                     });
         });
 
+
+
         signUpLink.setOnClickListener(view -> {
             startActivity(new Intent(SignIn.this, SignUp.class));
         });
@@ -110,17 +117,16 @@ public class SignIn extends AppCompatActivity {
     private void navigateToRolePage(String role) {
         switch (role) {
             case "Visitor":
-
-                Toast.makeText(this, "Navigating to Visitor Home Page...", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(this, VisitorDashboard.class);
                 startActivity(intent);
                 finish();
                 break;
             case "Artist":
-                 intent = new Intent(this, ArtistDashboard.class);
+
+                Toast.makeText(this, "Navigating to Artist Home Page...", Toast.LENGTH_SHORT).show();
+                intent = new Intent(this, ArtistDashboard.class);
                 startActivity(intent);
                 finish();
-                Toast.makeText(this, "Navigating to Artist Home Page...", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 Toast.makeText(this, "Unknown role: " + role, Toast.LENGTH_SHORT).show();
