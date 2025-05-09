@@ -7,6 +7,7 @@ import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.arthub.Admin.AdminDashboard;
+import com.example.arthub.Admin.CreateEvent;
 import com.example.arthub.Artist.ArtistDashboard;
 import com.example.arthub.R;
 import com.example.arthub.Visitor.VisitorDashboard;
@@ -77,14 +78,14 @@ public class SignIn extends AppCompatActivity {
                             if (user != null) {
                                 String uid = user.getUid();
 
-                                // Check if the user is an admin
+
                                 databaseRef.child("admin").child(uid).get().addOnCompleteListener(adminTask -> {
                                     if (adminTask.isSuccessful() && adminTask.getResult().exists()) {
                                         Toast.makeText(this, "Logged in as Admin", Toast.LENGTH_SHORT).show();
-                                        startActivity(new Intent(this, AdminDashboard.class));
+                                        startActivity(new Intent(this, CreateEvent.class));
                                         finish();
                                     } else {
-                                        // Not an admin; check user role
+
                                         databaseRef.child("users").child(uid).child("role").get().addOnCompleteListener(userTask -> {
                                             if (userTask.isSuccessful() && userTask.getResult().exists()) {
                                                 String roleInDb = userTask.getResult().getValue(String.class);
