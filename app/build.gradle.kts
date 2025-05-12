@@ -37,7 +37,7 @@ dependencies {
 
     implementation("com.google.firebase:firebase-auth:22.0.0")
     implementation("com.google.firebase:firebase-database:20.3.0")
-
+    implementation ("com.google.android.material:material:1.4.0")
 
 
 
@@ -51,6 +51,7 @@ dependencies {
     implementation(libs.credentials.play.services.auth)
     implementation(libs.googleid)
     implementation(libs.play.services.maps)
+    implementation(libs.firebase.storage)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
