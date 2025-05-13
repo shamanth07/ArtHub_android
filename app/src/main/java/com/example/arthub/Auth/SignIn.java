@@ -82,7 +82,7 @@ public class SignIn extends AppCompatActivity {
                                 databaseRef.child("admin").child(uid).get().addOnCompleteListener(adminTask -> {
                                     if (adminTask.isSuccessful() && adminTask.getResult().exists()) {
                                         Toast.makeText(this, "Logged in as Admin", Toast.LENGTH_SHORT).show();
-                                        startActivity(new Intent(this, CreateEvent.class));
+                                        startActivity(new Intent(this, AdminDashboard.class));
                                         finish();
                                     } else {
 
