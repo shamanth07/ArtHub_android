@@ -1,0 +1,65 @@
+package com.example.arthub.Admin;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+import com.example.arthub.Auth.SignIn;
+import com.example.arthub.R;
+import com.google.firebase.auth.FirebaseAuth;
+
+public class AdminAccountPage extends AppCompatActivity {
+
+
+    Button btnLogout;
+
+    ImageView backbtn;
+
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_admin_account_page);
+
+
+        btnLogout = findViewById(R.id.btnLogout);
+        backbtn = findViewById(R.id.backbtn);
+
+
+
+
+
+        btnLogout.setOnClickListener(v -> {
+            FirebaseAuth.getInstance().signOut();
+            Toast.makeText(AdminAccountPage.this, "Logged out", Toast.LENGTH_SHORT).show();
+
+            Intent intent = new Intent(AdminAccountPage.this, SignIn.class);
+            startActivity(intent);
+            finish();
+        });
+
+        backbtn.setOnClickListener(v -> {
+            Intent intent = new Intent(AdminAccountPage.this, AdminDashboard.class);
+            startActivity(intent);
+            finish();
+
+        });
+
+
+
+
+    }
+
+
+
+}

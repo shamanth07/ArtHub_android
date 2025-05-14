@@ -13,6 +13,9 @@
         android:theme="@style/Theme.Arthub"
         tools:targetApi="31">
         <activity
+            android:name=".Admin.AdminAccountPage"
+            android:exported="false" />
+        <activity
             android:name=".Auth.ForgetPassword"
             android:exported="false" />
         <activity

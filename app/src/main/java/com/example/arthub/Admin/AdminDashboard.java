@@ -59,6 +59,13 @@ public class AdminDashboard extends AppCompatActivity {
 
         loadEvents();
 
+        menuIcon.setOnClickListener(v -> {
+            Intent intent = new Intent(AdminDashboard.this,AdminAccountPage.class);
+            startActivity(intent);
+            finish();
+
+        });
+
         btnCreateEvent.setOnClickListener(v -> {
             Intent intent = new Intent(AdminDashboard.this, CreateEvent.class);
             startActivity(intent);
