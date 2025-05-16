@@ -43,7 +43,7 @@ public class CreateEvent extends AppCompatActivity {
         descriptionInput = findViewById(R.id.descriptionInput);
         timeInput = findViewById(R.id.timeInput);
         maxArtistsInput = findViewById(R.id.maxArtistsInput);
-        datePicker = findViewById(R.id.datePicker);
+
         bannerImage = findViewById(R.id.uploadImage);
 
 
@@ -53,7 +53,13 @@ public class CreateEvent extends AppCompatActivity {
 
         bannerImage.setOnClickListener(v -> openImagePicker());
 
-        
+        datePicker = findViewById(R.id.datePicker);
+
+        Calendar today = Calendar.getInstance();
+        datePicker.setMinDate(today.getTimeInMillis());
+
+
+
         findViewById(R.id.createButton).setOnClickListener(v -> {
             if (selectedImageUri != null) {
                 uploadBannerImageAndSaveEvent();
@@ -109,8 +115,12 @@ public class CreateEvent extends AppCompatActivity {
         Event event = new Event(eventId, title, description, eventDate, time, maxArtists, bannerImageUrl);
 
         eventsRef.child(eventId).setValue(event)
-                .addOnSuccessListener(unused ->
-                        Toast.makeText(this, "Event created!", Toast.LENGTH_SHORT).show())
+                .addOnSuccessListener(unused -> {
+                    Toast.makeText(this, "Event created!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(CreateEvent.this, AdminDashboard.class);
+                    startActivity(intent);
+                    finish();
+                })
                 .addOnFailureListener(e ->
                         Toast.makeText(this, "Failed to save event: " + e.getMessage(), Toast.LENGTH_LONG).show());
     }
