@@ -1,6 +1,8 @@
 package com.example.arthub.Admin;
 
-public class Event {
+import java.io.Serializable;
+
+public class Event  implements Serializable {
     public String eventId;
     public String title;
     public String description;

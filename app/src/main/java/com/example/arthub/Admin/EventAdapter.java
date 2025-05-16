@@ -1,6 +1,9 @@
 package com.example.arthub.Admin;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +26,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 
     private Context context;
     private List<Event> eventList;
+
+
 
     public EventAdapter(Context context, List<Event> eventList) {
         this.context = context;
@@ -55,9 +60,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 
 
         holder.btnEdit.setOnClickListener(v -> {
-            if (context instanceof AdminDashboard) {
-                ((AdminDashboard) context).editEvent(event);
-            }
+            Intent intent = new Intent(context, EditEvent.class);
+            intent.putExtra("event", event);
+            context.startActivity(intent);
         });
 
 

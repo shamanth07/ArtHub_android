@@ -39,6 +39,8 @@
         <activity
             android:name=".MainActivity"
             android:exported="false" />
+        <activity android:name=".Admin.EditEvent"
+            android:exported="false"/>
         <activity
             android:name=".Auth.SplashScreen"
             android:exported="true">
