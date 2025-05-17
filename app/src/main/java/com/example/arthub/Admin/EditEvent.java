@@ -40,7 +40,7 @@ public class EditEvent extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_event); // Reuse same layout
+        setContentView(R.layout.activity_create_event);
 
         titleInput = findViewById(R.id.titleInput);
         descriptionInput = findViewById(R.id.descriptionInput);
@@ -48,16 +48,16 @@ public class EditEvent extends AppCompatActivity {
         maxArtistsInput = findViewById(R.id.maxArtistsInput);
         datePicker = findViewById(R.id.datePicker);
         bannerImage = findViewById(R.id.uploadImage);
-        actionButton = findViewById(R.id.createButton); // Same ID, change text
+        actionButton = findViewById(R.id.createButton);
 
         storageRef = FirebaseStorage.getInstance().getReference("event_banners");
         eventsRef = FirebaseDatabase.getInstance().getReference("events");
 
-        // Disable past dates
+        // Disabling  past dates in ui
         Calendar today = Calendar.getInstance();
         datePicker.setMinDate(today.getTimeInMillis());
 
-        // Check if event is passed
+
         if (getIntent().hasExtra("event")) {
             existingEvent = (Event) getIntent().getSerializableExtra("event");
             populateEventData(existingEvent);
@@ -114,7 +114,7 @@ public class EditEvent extends AppCompatActivity {
         long dateMillis = cal.getTimeInMillis();
 
         if (selectedImageUri != null) {
-            // Upload new image
+
             StorageReference imageRef = storageRef.child("banner_" + eventId + ".jpg");
             imageRef.putFile(selectedImageUri).addOnSuccessListener(taskSnapshot ->
                     imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
@@ -124,7 +124,7 @@ public class EditEvent extends AppCompatActivity {
                     Toast.makeText(this, "Image upload failed: " + e.getMessage(), Toast.LENGTH_LONG).show()
             );
         } else {
-            // Use existing banner URL
+
             saveUpdatedEvent(eventId, title, description, dateMillis, time, maxArtists, existingEvent.getBannerImageUrl());
         }
     }
