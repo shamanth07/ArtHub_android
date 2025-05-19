@@ -63,7 +63,7 @@ public class SignUp extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             FirebaseUser user = mAuth.getCurrentUser();
                             if (user != null) {
-                                checkAndSaveUser(user.getUid(), email,password, role);
+                                checkAndSaveUser(user.getUid(), email, role);
                             }
                         } else {
                             Toast.makeText(this, "Sign up failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
@@ -79,7 +79,7 @@ public class SignUp extends AppCompatActivity {
         });
     }
 
-    private void checkAndSaveUser(String uid, String email, String password, String role) {
+    private void checkAndSaveUser(String uid, String email, String role) {
         DatabaseReference adminRef = databaseRef.child("admin");
 
         adminRef.get().addOnCompleteListener(task -> {
@@ -87,7 +87,7 @@ public class SignUp extends AppCompatActivity {
                 DataSnapshot snapshot = task.getResult();
                 if (!snapshot.exists()) {
                     // No admin yet, this is the first user → Save as admin
-                    adminRef.child(uid).setValue(new User(email, password, "admin"))
+                    adminRef.child(uid).setValue(new User(email,  "admin"))
                             .addOnCompleteListener(adminTask -> {
                                 if (adminTask.isSuccessful()) {
                                     Toast.makeText(this, "Signed up as Admin", Toast.LENGTH_SHORT).show();
@@ -97,7 +97,7 @@ public class SignUp extends AppCompatActivity {
                             });
                 } else {
 
-                    databaseRef.child("users").child(uid).setValue(new User(email, password, role))
+                    databaseRef.child("users").child(uid).setValue(new User(email, role))
                             .addOnCompleteListener(userTask -> {
                                 if (userTask.isSuccessful()) {
                                     Toast.makeText(this, "Signed up as " + role, Toast.LENGTH_SHORT).show();
