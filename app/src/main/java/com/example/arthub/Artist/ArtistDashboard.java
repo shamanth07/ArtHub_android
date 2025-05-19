@@ -6,6 +6,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,6 +27,8 @@ public class ArtistDashboard extends AppCompatActivity {
 
      TextView artistname;
 
+     ImageView menuIcon;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +41,15 @@ public class ArtistDashboard extends AppCompatActivity {
 
         upldartwork = findViewById(R.id.upldartwork);
         artistname = findViewById(R.id.artistname);
+        menuIcon = findViewById(R.id.menuIcon);
 
         upldartwork.setOnClickListener(v -> {
             Intent intent = new Intent(ArtistDashboard.this, UploadArtwork.class);
+            startActivity(intent);
+            finish();
+        });
+        menuIcon.setOnClickListener(v -> {
+            Intent intent = new Intent(ArtistDashboard.this,ArtistAccountPage.class);
             startActivity(intent);
             finish();
         });

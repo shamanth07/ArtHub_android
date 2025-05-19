@@ -124,7 +124,6 @@ public class SignIn extends AppCompatActivity {
                 break;
             case "Artist":
 
-                Toast.makeText(this, "Navigating to Artist Home Page...", Toast.LENGTH_SHORT).show();
                 intent = new Intent(this, ArtistDashboard.class);
                 startActivity(intent);
                 finish();
