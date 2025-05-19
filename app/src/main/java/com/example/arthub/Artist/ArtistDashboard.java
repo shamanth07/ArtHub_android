@@ -39,6 +39,12 @@ public class ArtistDashboard extends AppCompatActivity {
         upldartwork = findViewById(R.id.upldartwork);
         artistname = findViewById(R.id.artistname);
 
+        upldartwork.setOnClickListener(v -> {
+            Intent intent = new Intent(ArtistDashboard.this, UploadArtwork.class);
+            startActivity(intent);
+            finish();
+        });
+
 
 
 
