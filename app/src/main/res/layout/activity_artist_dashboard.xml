@@ -11,19 +11,43 @@
 
 
 
-    <TextView
-        android:id="@+id/artistname"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:text=""
-        />
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/profileimage"
+            android:layout_marginEnd="10dp" />
+
+
+        <TextView
+            android:id="@+id/artistname"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text=""
+            android:textStyle="bold"
+            android:paddingStart="10dp"
+            android:ellipsize="end"
+            android:maxLines="1" />
+
+
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/notification" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/upldartwork"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:text="Upload ArtWork"
         android:backgroundTint="@color/black"/>
 </LinearLayout>
