@@ -46,7 +46,6 @@ public class ArtistDashboard extends AppCompatActivity {
         upldartwork.setOnClickListener(v -> {
             Intent intent = new Intent(ArtistDashboard.this, UploadArtwork.class);
             startActivity(intent);
-            finish();
         });
         menuIcon.setOnClickListener(v -> {
             Intent intent = new Intent(ArtistDashboard.this,ArtistAccountPage.class);

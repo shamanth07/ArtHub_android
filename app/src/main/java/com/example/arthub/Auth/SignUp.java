@@ -73,9 +73,9 @@ public class SignUp extends AppCompatActivity {
 
         signInLink.setOnClickListener(view -> {
             Toast.makeText(this, "Go to Sign In", Toast.LENGTH_SHORT).show();
-               Intent intent = new Intent(SignUp.this,SignIn.class);
-               startActivity(intent);
-               finish();
+            Intent intent = new Intent(SignUp.this,SignIn.class);
+            startActivity(intent);
+            finish();
         });
     }
 
@@ -119,3 +119,4 @@ public class SignUp extends AppCompatActivity {
 
 
 }
+
