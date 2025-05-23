@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -15,6 +16,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.arthub.Auth.SignIn;
 import com.example.arthub.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class AdminAccountPage extends AppCompatActivity {
 
@@ -22,6 +24,8 @@ public class AdminAccountPage extends AppCompatActivity {
     Button btnLogout;
 
     ImageView backbtn;
+
+    TextView adminName;
 
 
 
@@ -34,6 +38,8 @@ public class AdminAccountPage extends AppCompatActivity {
 
         btnLogout = findViewById(R.id.btnLogout);
         backbtn = findViewById(R.id.backbtn);
+
+        adminName = findViewById(R.id.adminName);
 
 
 
@@ -56,7 +62,15 @@ public class AdminAccountPage extends AppCompatActivity {
         });
 
 
-
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            String email = user.getEmail();
+            String username = null;
+            if (email != null) {
+                username = email.split("@")[0];
+            }
+            adminName.setText(username);
+        }
 
     }
 

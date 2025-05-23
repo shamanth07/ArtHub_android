@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -15,12 +16,15 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.arthub.Auth.SignIn;
 import com.example.arthub.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class ArtistAccountPage extends AppCompatActivity {
 
     Button btnLogout;
 
     ImageView backbtn;
+
+    TextView artistName;
 
 
 
@@ -32,6 +36,7 @@ public class ArtistAccountPage extends AppCompatActivity {
 
         btnLogout = findViewById(R.id.btnLogout);
         backbtn = findViewById(R.id.backbtn);
+        artistName = findViewById(R.id.artistname);
 
 
         btnLogout.setOnClickListener(v -> {
@@ -48,6 +53,16 @@ public class ArtistAccountPage extends AppCompatActivity {
             finish();
         });
 
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            String email = user.getEmail();
+            String username = null;
+            if (email != null) {
+                username = email.split("@")[0];
+            }
+            artistName.setText(username);
+        }
 
 
 

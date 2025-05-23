@@ -5,19 +5,21 @@
     android:orientation="vertical"
     android:padding="24dp"
     android:gravity="center_horizontal"
-    android:background="@android:color/white">
+    android:background="@android:color/white"
+
+    >
 
 
 
 
 
-<ImageView
-    android:id="@+id/backbtn"
-    android:layout_width="35dp"
-    android:layout_height="25dp"
-    android:src="@drawable/back"
-    android:layout_marginRight="160dp"
-    />
+    <ImageView
+        android:id="@+id/backbtn"
+        android:layout_width="35dp"
+        android:layout_height="25dp"
+        android:src="@drawable/back"
+        android:layout_marginRight="160dp"
+        />
 
 
 
@@ -33,10 +35,10 @@
 
 
     <TextView
-        android:id="@+id/adminName"
+        android:id="@+id/visitorName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
+        android:text="Visitor Name"
         android:textStyle="bold"
         android:textSize="18sp"
         android:layout_marginTop="12dp" />
@@ -89,41 +91,13 @@
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/createevent"
-                 />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Create Event"
-                android:textSize="16sp"
-                android:layout_marginStart="12dp" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#CCCCCC" />
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingVertical="12dp"
-            android:clickable="true"
-            android:focusable="true">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/reports"
+                android:src="@drawable/bookinghistory"
                 />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Reports"
+                android:text="Booking History"
                 android:textSize="16sp"
                 android:layout_marginStart="12dp" />
         </LinearLayout>
@@ -146,7 +120,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/settings"
-                 />
+                />
 
             <TextView
                 android:layout_width="wrap_content"

@@ -2,9 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-
-
-
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -15,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Arthub"
         tools:targetApi="31">
+        <activity
+            android:name=".Visitor.VisitorAccountPage"
+            android:exported="false" />
         <activity
             android:name=".Artist.UploadArtwork"
             android:exported="false" />
@@ -63,9 +63,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCz39FE9RCbShlRfF2wZuw08JqfT-hZVvA"/>
-
-
+            android:value="AIzaSyCz39FE9RCbShlRfF2wZuw08JqfT-hZVvA" />
     </application>
 
 </manifest>
