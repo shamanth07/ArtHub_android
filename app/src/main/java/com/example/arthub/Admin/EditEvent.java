@@ -15,6 +15,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.arthub.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -22,7 +29,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.Calendar;
 
-public class EditEvent extends AppCompatActivity {
+public class EditEvent extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final int PICK_IMAGE_REQUEST = 1;
 
@@ -34,8 +41,16 @@ public class EditEvent extends AppCompatActivity {
     private Uri selectedImageUri;
     private Event existingEvent;
 
+    private double latitude = 0.0;
+    private double longitude = 0.0;
+
+    private String selectedEventLocation;
+
     private StorageReference storageRef;
     private DatabaseReference eventsRef;
+
+    private GoogleMap map;
+    private Marker locationMarker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,15 +63,21 @@ public class EditEvent extends AppCompatActivity {
         maxArtistsInput = findViewById(R.id.maxArtistsInput);
         datePicker = findViewById(R.id.datePicker);
         bannerImage = findViewById(R.id.uploadImage);
+
         actionButton = findViewById(R.id.createButton);
 
         storageRef = FirebaseStorage.getInstance().getReference("event_banners");
         eventsRef = FirebaseDatabase.getInstance().getReference("events");
 
-        // Disabling  past dates in ui
         Calendar today = Calendar.getInstance();
         datePicker.setMinDate(today.getTimeInMillis());
 
+        // Setup map
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.mapFragment);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+        }
 
         if (getIntent().hasExtra("event")) {
             existingEvent = (Event) getIntent().getSerializableExtra("event");
@@ -80,17 +101,42 @@ public class EditEvent extends AppCompatActivity {
         timeInput.setText(event.getTime());
         maxArtistsInput.setText(String.valueOf(event.getMaxArtists()));
 
+
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(event.getEventDate());
         datePicker.updateDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
 
         Glide.with(this).load(event.getBannerImageUrl()).into(bannerImage);
+
+        selectedEventLocation = event.getLocationName();
+
+        latitude = event.getLatitude();
+        longitude = event.getLongitude();
     }
 
     private void openImagePicker() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/*");
         startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        map = googleMap;
+
+        LatLng initialLatLng = new LatLng(latitude, longitude);
+        locationMarker = map.addMarker(new MarkerOptions().position(initialLatLng).title("Event Location"));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(initialLatLng, 15));
+
+        map.setOnMapClickListener(latLng -> {
+            latitude = latLng.latitude;
+            longitude = latLng.longitude;
+            if (locationMarker != null) {
+                locationMarker.setPosition(latLng);
+            } else {
+                locationMarker = map.addMarker(new MarkerOptions().position(latLng).title("Event Location"));
+            }
+        });
     }
 
     @Override
@@ -109,28 +155,27 @@ public class EditEvent extends AppCompatActivity {
         String time = timeInput.getText().toString().trim();
         int maxArtists = Integer.parseInt(maxArtistsInput.getText().toString().trim());
 
+
         Calendar cal = Calendar.getInstance();
         cal.set(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
         long dateMillis = cal.getTimeInMillis();
 
         if (selectedImageUri != null) {
-
             StorageReference imageRef = storageRef.child("banner_" + eventId + ".jpg");
             imageRef.putFile(selectedImageUri).addOnSuccessListener(taskSnapshot ->
                     imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                        saveUpdatedEvent(eventId, title, description, dateMillis, time, maxArtists, uri.toString());
+                        saveUpdatedEvent(eventId, title, description, dateMillis, time, maxArtists, uri.toString(),selectedEventLocation, latitude, longitude);
                     })
             ).addOnFailureListener(e ->
                     Toast.makeText(this, "Image upload failed: " + e.getMessage(), Toast.LENGTH_LONG).show()
             );
         } else {
-
-            saveUpdatedEvent(eventId, title, description, dateMillis, time, maxArtists, existingEvent.getBannerImageUrl());
+            saveUpdatedEvent(eventId, title, description, dateMillis, time, maxArtists, existingEvent.getBannerImageUrl(),selectedEventLocation, latitude, longitude);
         }
     }
 
-    private void saveUpdatedEvent(String eventId, String title, String description, long date, String time, int maxArtists, String bannerUrl) {
-        Event updatedEvent = new Event(eventId, title, description, date, time, maxArtists, bannerUrl);
+    private void saveUpdatedEvent(String eventId, String title, String description, long date, String time, int maxArtists, String bannerUrl, String selectedEventLocation,double latitude, double longitude) {
+        Event updatedEvent = new Event(eventId, title, description, date, time, maxArtists, bannerUrl,selectedEventLocation,latitude, longitude);
 
         eventsRef.child(eventId).setValue(updatedEvent)
                 .addOnSuccessListener(unused -> {

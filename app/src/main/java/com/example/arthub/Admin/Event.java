@@ -2,7 +2,7 @@ package com.example.arthub.Admin;
 
 import java.io.Serializable;
 
-public class Event  implements Serializable {
+public class Event implements Serializable {
     public String eventId;
     public String title;
     public String description;
@@ -11,9 +11,16 @@ public class Event  implements Serializable {
     public int maxArtists;
     public String bannerImageUrl;
 
+    private String locationName;
+
+
+
+    public double latitude;
+    public double longitude;
+
     public Event() {}
 
-    public Event(String eventId, String title, String description, long date, String time, int maxArtists, String bannerImageUrl) {
+    public Event(String eventId, String title, String description, long date, String time, int maxArtists, String bannerImageUrl,String locationName, double latitude, double longitude) {
         this.eventId = eventId;
         this.title = title;
         this.description = description;
@@ -21,6 +28,10 @@ public class Event  implements Serializable {
         this.time = time;
         this.maxArtists = maxArtists;
         this.bannerImageUrl = bannerImageUrl;
+        this.locationName = locationName;
+
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public String getEventId() {
@@ -78,6 +89,28 @@ public class Event  implements Serializable {
     public void setBannerImageUrl(String bannerImageUrl) {
         this.bannerImageUrl = bannerImageUrl;
     }
+
+    public String getLocationName() {
+        return locationName;
+    }
+
+    public void setLocationName(String locationName) {
+        this.locationName = locationName;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
 }
-
-
