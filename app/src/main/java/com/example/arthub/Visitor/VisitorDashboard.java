@@ -1,6 +1,8 @@
 package com.example.arthub.Visitor;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,15 +14,22 @@ import com.example.arthub.R;
 
 public class VisitorDashboard extends AppCompatActivity {
 
+
+    ImageView menuIcon;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_visitor_dashboard);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+
+
+
+        menuIcon = findViewById(R.id.menuIcon);
+
+        menuIcon.setOnClickListener(v -> {
+            Intent intent = new Intent(VisitorDashboard.this, VisitorAccountPage.class);
+            startActivity(intent);
         });
     }
 }

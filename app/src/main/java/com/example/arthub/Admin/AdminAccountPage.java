@@ -69,7 +69,7 @@ public class AdminAccountPage extends AppCompatActivity {
             if (email != null) {
                 username = email.split("@")[0];
             }
-            adminName.setText(username);
+            adminName.setText(username + "(Admin)");
         }
 
     }

@@ -25,7 +25,7 @@ public class ArtistDashboard extends AppCompatActivity {
 
     Button upldartwork;
 
-     TextView artistname;
+
 
      ImageView menuIcon;
 
@@ -40,7 +40,6 @@ public class ArtistDashboard extends AppCompatActivity {
 
 
         upldartwork = findViewById(R.id.upldartwork);
-        artistname = findViewById(R.id.artistname);
         menuIcon = findViewById(R.id.menuIcon);
 
         upldartwork.setOnClickListener(v -> {
@@ -57,16 +56,7 @@ public class ArtistDashboard extends AppCompatActivity {
 
 
 
-          FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-          if(user != null){
-              String email = user.getEmail();
-              artistname.setText(email);
-
-          }else {
-              artistname.setText("no artist logged in");
-
-          }
     }
 
 }

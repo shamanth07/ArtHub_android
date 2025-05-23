@@ -38,7 +38,7 @@
         android:id="@+id/visitorName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Visitor Name"
+        android:text="Visitor"
         android:textStyle="bold"
         android:textSize="18sp"
         android:layout_marginTop="12dp" />

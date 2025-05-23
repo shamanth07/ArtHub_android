@@ -36,7 +36,7 @@ public class ArtistAccountPage extends AppCompatActivity {
 
         btnLogout = findViewById(R.id.btnLogout);
         backbtn = findViewById(R.id.backbtn);
-        artistName = findViewById(R.id.artistname);
+        artistName = findViewById(R.id.artistName);
 
 
         btnLogout.setOnClickListener(v -> {
@@ -61,7 +61,7 @@ public class ArtistAccountPage extends AppCompatActivity {
             if (email != null) {
                 username = email.split("@")[0];
             }
-            artistName.setText(username);
+            artistName.setText(username + "(artist)");
         }
 
 

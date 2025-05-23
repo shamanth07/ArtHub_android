@@ -1,9 +1,12 @@
 package com.example.arthub.Visitor;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +14,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.arthub.Artist.ArtistAccountPage;
+import com.example.arthub.Auth.SignIn;
 import com.example.arthub.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -18,8 +23,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class VisitorAccountPage extends AppCompatActivity {
 
     ImageView backbtn;
-
-
+    Button btnLogout;
     TextView visitorName;
 
 
@@ -32,7 +36,7 @@ public class VisitorAccountPage extends AppCompatActivity {
 
 
         backbtn = findViewById(R.id.backbtn);
-
+        btnLogout = findViewById(R.id.btnLogout);
         visitorName = findViewById(R.id.visitorName);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -41,9 +45,24 @@ public class VisitorAccountPage extends AppCompatActivity {
             String username = null;
             if (email != null) {
                 username = email.split("@")[0];
+
             }
-           visitorName.setText(username);
+           visitorName.setText(username + "(visitor)");
         }
+
+        btnLogout.setOnClickListener(v -> {
+            FirebaseAuth.getInstance().signOut();
+            Toast.makeText(this, "Successfully logged out", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(VisitorAccountPage.this, SignIn.class);
+            startActivity(intent);
+            finish();
+        });
+
+        backbtn.setOnClickListener(v -> {
+            Intent intent = new Intent(VisitorAccountPage.this, VisitorDashboard.class);
+            startActivity(intent);
+
+        });
 
 
 

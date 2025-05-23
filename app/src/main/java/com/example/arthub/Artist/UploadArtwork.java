@@ -23,7 +23,7 @@ public class UploadArtwork extends AppCompatActivity {
 
     private static final int IMAGE_PICK_CODE = 101;
 
-    ImageView artworkImageView;
+    ImageView artworkImageView,backbtn;
     Button uploadArtworkButton;
     EditText titleEditText, descriptionEditText, categoryEditText, yearEditText, priceEditText;
 
@@ -45,6 +45,8 @@ public class UploadArtwork extends AppCompatActivity {
         categoryEditText = findViewById(R.id.categoryEditText);
         yearEditText = findViewById(R.id.yearEditText);
         priceEditText = findViewById(R.id.priceEditText);
+        backbtn = findViewById(R.id.backbtn);
+
 
         storage = FirebaseStorage.getInstance();
         database = FirebaseDatabase.getInstance();
@@ -58,6 +60,11 @@ public class UploadArtwork extends AppCompatActivity {
         });
 
         uploadArtworkButton.setOnClickListener(v -> uploadArtwork());
+
+        backbtn.setOnClickListener(v -> {
+            Intent intent = new Intent(UploadArtwork.this, ArtistDashboard.class);
+            startActivity(intent);
+        });
     }
 
     @Override
