@@ -48,9 +48,9 @@ public class VisitorProfilePage extends AppCompatActivity {
             String username = null;
             if (email != null) {
                 username = email.split("@")[0];
-
+                Username.setText(username + "(visitor)");
             }
-            Username.setText(username + "(visitor)");
+
 
         }
 

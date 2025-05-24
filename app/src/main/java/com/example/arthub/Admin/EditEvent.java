@@ -10,11 +10,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.arthub.R;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -22,11 +24,16 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.Arrays;
 import java.util.Calendar;
 
 public class EditEvent extends AppCompatActivity implements OnMapReadyCallback {
@@ -78,6 +85,44 @@ public class EditEvent extends AppCompatActivity implements OnMapReadyCallback {
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
+
+
+
+        // Initialize Places if not already
+        if (!Places.isInitialized()) {
+            Places.initialize(getApplicationContext(), "AIzaSyCz39FE9RCbShlRfF2wZuw08JqfT-hZVvA");
+        }
+
+        // Add AutocompleteSupportFragment for selecting place
+        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
+                getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+
+        if (autocompleteFragment != null) {
+            autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
+            autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+                @Override
+                public void onPlaceSelected(@NonNull Place place) {
+                    LatLng latLng = place.getLatLng();
+                    if (latLng != null) {
+                        latitude = latLng.latitude;
+                        longitude = latLng.longitude;
+                        selectedEventLocation = place.getName();
+
+                        if (map != null) {
+                            map.clear();
+                            locationMarker = map.addMarker(new MarkerOptions().position(latLng).title("Event Location"));
+                            map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f));
+                        }
+                    }
+                }
+
+                @Override
+                public void onError(@NonNull Status status) {
+                    Toast.makeText(EditEvent.this, "Location search failed: " + status.getStatusMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
 
         if (getIntent().hasExtra("event")) {
             existingEvent = (Event) getIntent().getSerializableExtra("event");

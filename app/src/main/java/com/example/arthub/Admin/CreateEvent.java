@@ -82,14 +82,14 @@ public class CreateEvent extends AppCompatActivity implements OnMapReadyCallback
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapFragment);
         if (mapFragment != null) mapFragment.getMapAsync(this);
 
-        // Autocomplete setup
+
         autocompleteFragment = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
         autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(@NonNull Place place) {
                 selectedLatLng = place.getLatLng();
-                selectedEventLocation = place.getName(); // Save place name here
+                selectedEventLocation = place.getName();
 
                 if (mMap != null) {
                     mMap.clear();
@@ -156,7 +156,7 @@ public class CreateEvent extends AppCompatActivity implements OnMapReadyCallback
         String description = descriptionInput.getText().toString().trim();
         String time = timeInput.getText().toString().trim();
         int maxArtists = Integer.parseInt(maxArtistsInput.getText().toString().trim());
-        String locationName = selectedEventLocation; // From the Autocomplete result
+        String locationName = selectedEventLocation;
 
 
 
