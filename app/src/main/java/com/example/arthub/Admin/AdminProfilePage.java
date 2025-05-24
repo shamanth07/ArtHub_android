@@ -2,10 +2,9 @@ package com.example.arthub.Admin;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,73 +12,59 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.arthub.Auth.SignIn;
+import com.example.arthub.Auth.ChangePassword;
 import com.example.arthub.R;
+import com.example.arthub.Visitor.VisitorAccountPage;
+import com.example.arthub.Visitor.VisitorProfilePage;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class AdminAccountPage extends AppCompatActivity {
+public class AdminProfilePage extends AppCompatActivity {
 
-
-    Button btnLogout;
 
     ImageView backbtn;
 
-    TextView adminName,adminprofilebtn;
+    TextView Username,changepassword;
 
+    EditText emailid;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_admin_account_page);
+        setContentView(R.layout.activity_admin_profile_page);
 
-
-        btnLogout = findViewById(R.id.btnLogout);
         backbtn = findViewById(R.id.backbtn);
-
-        adminName = findViewById(R.id.adminName);
-        adminprofilebtn = findViewById(R.id.adminprofilebtn);
-
-
+        Username = findViewById(R.id.Username);
+        changepassword = findViewById(R.id.changepassword);
+        emailid = findViewById(R.id.emailid);
 
 
-
-        btnLogout.setOnClickListener(v -> {
-            FirebaseAuth.getInstance().signOut();
-            Toast.makeText(AdminAccountPage.this, "Logged out", Toast.LENGTH_SHORT).show();
-
-            Intent intent = new Intent(AdminAccountPage.this, SignIn.class);
-            startActivity(intent);
-            finish();
-        });
 
         backbtn.setOnClickListener(v -> {
-            Intent intent = new Intent(AdminAccountPage.this, AdminDashboard.class);
+            Intent intent = new Intent(AdminProfilePage.this, AdminAccountPage.class);
             startActivity(intent);
-            finish();
-
         });
-        adminprofilebtn.setOnClickListener(v -> {
-            Intent intent = new Intent(AdminAccountPage.this, AdminProfilePage.class);
+        changepassword.setOnClickListener(v -> {
+            Intent intent = new Intent(AdminProfilePage.this, ChangePassword.class);
             startActivity(intent);
-
         });
-
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             String email = user.getEmail();
+            emailid.setText(email);
             String username = null;
             if (email != null) {
                 username = email.split("@")[0];
+                Username.setText(username + "(Admin)");
             }
-            adminName.setText(username + "(Admin)");
+
+
         }
 
+
+
     }
-
-
-
 }
