@@ -2,7 +2,10 @@ package com.example.arthub.Admin;
 
 import static androidx.core.content.ContextCompat.startActivity;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,10 +70,20 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 
 
         holder.btnCancel.setOnClickListener(v -> {
-            if (context instanceof AdminDashboard) {
-                ((AdminDashboard) context).deleteEvent(event.getEventId());
-            }
+            new AlertDialog.Builder(context)
+                    .setTitle("Delete Event")
+                    .setMessage("Are you sure you want to delete this event?")
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        if (context instanceof AdminDashboard) {
+                            ((AdminDashboard) context).deleteEvent(event.getEventId());
+                        }
+                    })
+                    .setNegativeButton("No", (dialog, which) -> {
+                        dialog.dismiss();
+                    })
+                    .show();
         });
+
     }
 
     @Override
