@@ -13,6 +13,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.arthub.Auth.ChangePassword;
 import com.example.arthub.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -23,7 +24,7 @@ public class VisitorProfilePage extends AppCompatActivity {
 
     TextView Username,changepassword;
 
-    EditText emailid;
+   TextView emailid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,10 @@ public class VisitorProfilePage extends AppCompatActivity {
 
         backbtn.setOnClickListener(v -> {
             Intent intent = new Intent(VisitorProfilePage.this, VisitorAccountPage.class);
+            startActivity(intent);
+        });
+        changepassword.setOnClickListener(v -> {
+            Intent intent = new Intent(VisitorProfilePage.this, ChangePassword.class);
             startActivity(intent);
         });
 
