@@ -1,8 +1,7 @@
-package com.example.arthub.Visitor;
+package com.example.arthub.Artist;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,50 +17,52 @@ import com.example.arthub.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class VisitorProfilePage extends AppCompatActivity {
+public class ArtistProfilePage extends AppCompatActivity {
+
+
+    TextView changepassword,ArtistUsername;
+
+    EditText emailid;
 
     ImageView backbtn;
-
-    TextView Username,changepassword;
-
-  EditText emailid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_visitor_profile_page);
+        setContentView(R.layout.activity_artist_profile_page);
 
-        backbtn = findViewById(R.id.backbtn);
-        Username = findViewById(R.id.Username);
+
         changepassword = findViewById(R.id.changepassword);
+        backbtn = findViewById(R.id.backbtn);
+        ArtistUsername = findViewById(R.id.ArtistUsername);
         emailid = findViewById(R.id.emailid);
 
-        backbtn.setOnClickListener(v -> {
-            Intent intent = new Intent(VisitorProfilePage.this, VisitorAccountPage.class);
-            startActivity(intent);
-        });
-        changepassword.setOnClickListener(v -> {
-            Intent intent = new Intent(VisitorProfilePage.this, ChangePassword.class);
-            startActivity(intent);
-        });
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
+        if(user != null){
             String email = user.getEmail();
             emailid.setText(email);
-            String username = null;
-            if (email != null) {
-                username = email.split("@")[0];
-                Username.setText(username + "(visitor)");
+            if(email != null){
+                String username = null;
+              username = email.split("@")[0];
+              ArtistUsername.setText(username + "(Artist)");
+
             }
-
-
         }
 
+        backbtn.setOnClickListener(v -> {
+            Intent intent = new Intent(ArtistProfilePage.this, ArtistAccountPage.class);
+            startActivity(intent);
+        });
 
 
 
+
+        changepassword.setOnClickListener(v -> {
+            Intent intent = new Intent(ArtistProfilePage.this, ChangePassword.class);
+            startActivity(intent);
+        });
 
     }
 }

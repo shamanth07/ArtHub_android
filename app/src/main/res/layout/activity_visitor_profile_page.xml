@@ -52,28 +52,31 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="40dp"
+        android:layout_marginEnd="20dp"
         >
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Email:"
+            android:text="Email:"
             android:textSize="25dp"
             android:textStyle="bold"
             android:layout_marginBottom="10dp"
             />
-        <TextView
+        <EditText
             android:id="@+id/emailid"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="example@gmail.com"
+            android:textColorHint="@color/black"
             android:text=""/>
 
         <TextView
             android:id="@+id/changepassword"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:hint="Change Password"
+            android:text="Change Password"
             android:textSize="20dp"
             android:textStyle="bold"
             android:layout_marginTop="20dp"

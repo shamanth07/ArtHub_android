@@ -24,7 +24,7 @@ public class ArtistAccountPage extends AppCompatActivity {
 
     ImageView backbtn;
 
-    TextView artistName;
+    TextView artistName,artistprofile;
 
 
 
@@ -37,6 +37,7 @@ public class ArtistAccountPage extends AppCompatActivity {
         btnLogout = findViewById(R.id.btnLogout);
         backbtn = findViewById(R.id.backbtn);
         artistName = findViewById(R.id.artistName);
+        artistprofile = findViewById(R.id.artistprofile);
 
 
         btnLogout.setOnClickListener(v -> {
@@ -51,6 +52,11 @@ public class ArtistAccountPage extends AppCompatActivity {
             Intent intent = new Intent(ArtistAccountPage.this, ArtistDashboard.class);
             startActivity(intent);
             finish();
+        });
+
+        artistprofile.setOnClickListener(v -> {
+            Intent intent = new Intent(ArtistAccountPage.this, ArtistProfilePage.class);
+            startActivity(intent);
         });
 
 
