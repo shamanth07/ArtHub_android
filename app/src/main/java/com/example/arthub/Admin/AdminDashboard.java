@@ -100,8 +100,5 @@ public class AdminDashboard extends AppCompatActivity {
                         Toast.makeText(this, "Failed to delete: " + e.getMessage(), Toast.LENGTH_LONG).show());
     }
 
-    public void editEvent(Event event) {
 
-
-    }
 }

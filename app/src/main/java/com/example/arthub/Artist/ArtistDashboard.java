@@ -40,6 +40,9 @@ public class ArtistDashboard extends AppCompatActivity {
     DatabaseReference dbRef;
     FirebaseUser currentUser;
 
+
+    private DatabaseReference artworksRef;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,10 +53,16 @@ public class ArtistDashboard extends AppCompatActivity {
         menuIcon = findViewById(R.id.menuIcon);
         recyclerViewArtWorks = findViewById(R.id.recyclerViewArtWorks);
 
+
+        artworksRef = FirebaseDatabase.getInstance().getReference("artworks");
+
         artworkList = new ArrayList<>();
         adapter = new ArtworkAdapter(this, artworkList, new ArtworkAdapter.OnArtworkActionListener() {
             @Override
             public void onLikeClick(Artwork artwork) {
+
+
+
                 Toast.makeText(ArtistDashboard.this, "Liked: " + artwork.getTitle(), Toast.LENGTH_SHORT).show();
             }
 
@@ -65,8 +74,15 @@ public class ArtistDashboard extends AppCompatActivity {
 
             @Override
             public void onDeleteClick(Artwork artwork) {
-                Toast.makeText(ArtistDashboard.this, "Delete: " + artwork.getTitle(), Toast.LENGTH_SHORT).show();
-
+                artworksRef.child(artwork.getId()).removeValue().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(ArtistDashboard.this, "Deleted: " + artwork.getTitle(), Toast.LENGTH_SHORT).show();
+                        artworkList.remove(artwork);
+                        adapter.notifyDataSetChanged();
+                    } else {
+                        Toast.makeText(ArtistDashboard.this, "Delete failed.", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
 

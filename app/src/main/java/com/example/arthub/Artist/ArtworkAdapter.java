@@ -51,11 +51,6 @@ public class ArtworkAdapter extends RecyclerView.Adapter<ArtworkAdapter.ArtworkV
 
         // Set title
         holder.artworkTitle.setText(artwork.getTitle());
-
-        // Set artist name (use email prefix)
-
-
-
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         assert user != null;
@@ -64,7 +59,7 @@ public class ArtworkAdapter extends RecyclerView.Adapter<ArtworkAdapter.ArtworkV
             String artistName = useremail != null ? useremail.split("@")[0] : "Unknown";
         holder.artistName.setText(artistName);
 
-        // Click listeners
+
         holder.likeIcon.setOnClickListener(v -> {
             listener.onLikeClick(artwork);
         });
@@ -75,6 +70,7 @@ public class ArtworkAdapter extends RecyclerView.Adapter<ArtworkAdapter.ArtworkV
 
         holder.deleteIcon.setOnClickListener(v -> {
             listener.onDeleteClick(artwork);
+
         });
     }
 
@@ -98,7 +94,7 @@ public class ArtworkAdapter extends RecyclerView.Adapter<ArtworkAdapter.ArtworkV
         }
     }
 
-    // Interface for handling icon actions
+
     public interface OnArtworkActionListener {
         void onLikeClick(Artwork artwork);
         void onEditClick(Artwork artwork);
