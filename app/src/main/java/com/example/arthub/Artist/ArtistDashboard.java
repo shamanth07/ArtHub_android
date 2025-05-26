@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.arthub.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,6 +30,8 @@ public class ArtistDashboard extends AppCompatActivity {
 
      ImageView menuIcon;
 
+     RecyclerView recyclerViewArtWorks;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +44,8 @@ public class ArtistDashboard extends AppCompatActivity {
 
         upldartwork = findViewById(R.id.upldartwork);
         menuIcon = findViewById(R.id.menuIcon);
+        recyclerViewArtWorks = findViewById(R.id.recyclerViewArtWorks);
+
 
         upldartwork.setOnClickListener(v -> {
             Intent intent = new Intent(ArtistDashboard.this, UploadArtwork.class);
@@ -51,6 +56,8 @@ public class ArtistDashboard extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+
+
 
 
 
