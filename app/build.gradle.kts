@@ -39,9 +39,11 @@ dependencies {
     implementation("com.google.firebase:firebase-database:20.3.0")
     implementation ("com.google.android.material:material:1.4.0")
     implementation ("com.github.bumptech.glide:glide:4.16.0")
+    implementation(libs.firebase.inappmessaging)
     annotationProcessor ("com.github.bumptech.glide:compiler:4.16.0")
     implementation ("com.google.android.gms:play-services-maps:18.1.0")// for map api
     implementation ("com.google.android.libraries.places:places:3.2.0")// for place api
+
 
 
 
@@ -56,9 +58,11 @@ dependencies {
     implementation(libs.credentials)
     implementation(libs.credentials.play.services.auth)
     implementation(libs.googleid)
-    implementation(libs.play.services.maps)
+    implementation(libs.playServicesMaps)
     implementation(libs.firebase.storage)
+    implementation(libs.playServicesMaps)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
 }
