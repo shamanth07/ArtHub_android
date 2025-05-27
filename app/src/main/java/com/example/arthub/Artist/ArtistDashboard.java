@@ -70,9 +70,9 @@ public class ArtistDashboard extends AppCompatActivity {
 
             @Override
             public void onEditClick(Artwork artwork) {
-//                Intent intent = new Intent(ArtistDashboard.this, EditArtworkPage.class);
-//                intent.putExtra("artworkId", artworkId);
-//                startActivity(intent);
+                Intent intent = new Intent(ArtistDashboard.this, EditArtworkPage.class);
+                intent.putExtra("artworkId", artwork.getId());
+                startActivity(intent);
                 Toast.makeText(ArtistDashboard.this, "Edit: " + artwork.getTitle(), Toast.LENGTH_SHORT).show();
 
             }

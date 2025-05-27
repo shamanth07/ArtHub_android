@@ -10,6 +10,7 @@ import android.widget.*;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.example.arthub.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.*;
@@ -35,7 +36,7 @@ public class EditArtworkPage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_upload_artwork); // reuse same layout
+        setContentView(R.layout.activity_upload_artwork);
 
         artworkImageView = findViewById(R.id.artworkImageView);
         saveArtworkButton = findViewById(R.id.uploadArtworkButton);
@@ -68,6 +69,7 @@ public class EditArtworkPage extends AppCompatActivity {
                         yearEditText.setText(snapshot.child("year").getValue(String.class));
                         priceEditText.setText(snapshot.child("price").getValue(String.class));
                         existingImageUrl = snapshot.child("imageUrl").getValue(String.class);
+                        Glide.with(EditArtworkPage.this).load(existingImageUrl).into(artworkImageView);
                     }
                 }
 
@@ -104,11 +106,11 @@ public class EditArtworkPage extends AppCompatActivity {
     private void saveArtwork() {
         String title = titleEditText.getText().toString().trim();
         String desc = descriptionEditText.getText().toString().trim();
-        String category = categoryEditText.getText().toString().trim();
+        String catg = categoryEditText.getText().toString().trim();
         String year = yearEditText.getText().toString().trim();
         String price = priceEditText.getText().toString().trim();
 
-        if (title.isEmpty() || desc.isEmpty() || category.isEmpty() || year.isEmpty()) {
+        if (title.isEmpty() || desc.isEmpty() || catg.isEmpty() || year.isEmpty()) {
             Toast.makeText(this, "Fill all fields", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -123,23 +125,22 @@ public class EditArtworkPage extends AppCompatActivity {
             imageRef.putFile(imageUri)
                     .addOnSuccessListener(taskSnapshot -> imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
                         String imageUrl = uri.toString();
-                        saveArtworkData(title, desc, category, year, price, imageUrl, dialog);
+                        saveArtworkData(title, desc, catg, year, price, imageUrl, dialog);
                     }))
                     .addOnFailureListener(e -> {
                         dialog.dismiss();
                         Toast.makeText(this, "Image upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     });
         } else {
-            // No new image — use existing
-            saveArtworkData(title, desc, category, year, price, existingImageUrl, dialog);
+            saveArtworkData(title, desc, catg, year, price, existingImageUrl, dialog);
         }
     }
 
-    private void saveArtworkData(String title, String desc, String category, String year, String price, String imageUrl, ProgressDialog dialog) {
+    private void saveArtworkData(String title, String desc, String catg, String year, String price, String imageUrl, ProgressDialog dialog) {
         HashMap<String, Object> updatedData = new HashMap<>();
         updatedData.put("title", title);
         updatedData.put("description", desc);
-        updatedData.put("category", category);
+        updatedData.put("category", catg);
         updatedData.put("year", year);
         updatedData.put("price", price);
         updatedData.put("imageUrl", imageUrl);

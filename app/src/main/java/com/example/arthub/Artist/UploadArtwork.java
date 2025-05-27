@@ -77,6 +77,7 @@ public class UploadArtwork extends AppCompatActivity {
         String title = titleEditText.getText().toString().trim();
         String desc = descriptionEditText.getText().toString().trim();
         String year = yearEditText.getText().toString().trim();
+        String catg = categoryEditText.getText().toString().trim();
         String price = priceEditText.getText().toString().trim();
 
         if (imageUri == null || title.isEmpty() || desc.isEmpty() || year.isEmpty() || price.isEmpty()) {
@@ -95,7 +96,6 @@ public class UploadArtwork extends AppCompatActivity {
         imageRef.putFile(imageUri)
                 .addOnSuccessListener(taskSnapshot -> imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
                     String imageUrl = uri.toString();
-                    long timestamp = System.currentTimeMillis();
                     String artistId = auth.getCurrentUser().getUid();
 
                     Artwork artwork = new Artwork(
@@ -106,7 +106,7 @@ public class UploadArtwork extends AppCompatActivity {
                             price,
                             year,
                             artistId,
-                            timestamp
+                            catg
                     );
 
                     database.getReference("artworks").child(uniqueId).setValue(artwork)
