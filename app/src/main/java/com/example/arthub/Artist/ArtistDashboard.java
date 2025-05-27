@@ -37,6 +37,8 @@ public class ArtistDashboard extends AppCompatActivity {
     ArtworkAdapter adapter;
     List<Artwork> artworkList;
 
+    String artworkId;
+
     DatabaseReference dbRef;
     FirebaseUser currentUser;
 
@@ -68,6 +70,9 @@ public class ArtistDashboard extends AppCompatActivity {
 
             @Override
             public void onEditClick(Artwork artwork) {
+//                Intent intent = new Intent(ArtistDashboard.this, EditArtworkPage.class);
+//                intent.putExtra("artworkId", artworkId);
+//                startActivity(intent);
                 Toast.makeText(ArtistDashboard.this, "Edit: " + artwork.getTitle(), Toast.LENGTH_SHORT).show();
 
             }

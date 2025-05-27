@@ -1,7 +1,6 @@
 package com.example.arthub.Artist;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,22 +15,21 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.*;
 import com.google.firebase.storage.*;
 
-import java.util.HashMap;
 import java.util.UUID;
 
 public class UploadArtwork extends AppCompatActivity {
 
     private static final int IMAGE_PICK_CODE = 101;
 
-    ImageView artworkImageView,backbtn;
-    Button uploadArtworkButton;
-    EditText titleEditText, descriptionEditText, categoryEditText, yearEditText, priceEditText;
+    private ImageView artworkImageView, backbtn;
+    private Button uploadArtworkButton;
+    private EditText titleEditText, descriptionEditText, categoryEditText, yearEditText, priceEditText;
 
-    Uri imageUri;
+    private Uri imageUri;
 
-    FirebaseStorage storage;
-    FirebaseDatabase database;
-    FirebaseAuth auth;
+    private FirebaseStorage storage;
+    private FirebaseDatabase database;
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,13 +45,11 @@ public class UploadArtwork extends AppCompatActivity {
         priceEditText = findViewById(R.id.priceEditText);
         backbtn = findViewById(R.id.backbtn);
 
-
         storage = FirebaseStorage.getInstance();
         database = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
 
         artworkImageView.setOnClickListener(v -> {
-            // Open Google Photos or gallery
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             intent.setType("image/*");
             startActivityForResult(Intent.createChooser(intent, "Select Artwork Image"), IMAGE_PICK_CODE);
@@ -64,6 +60,7 @@ public class UploadArtwork extends AppCompatActivity {
         backbtn.setOnClickListener(v -> {
             Intent intent = new Intent(UploadArtwork.this, ArtistDashboard.class);
             startActivity(intent);
+            finish();
         });
     }
 
@@ -79,17 +76,17 @@ public class UploadArtwork extends AppCompatActivity {
     private void uploadArtwork() {
         String title = titleEditText.getText().toString().trim();
         String desc = descriptionEditText.getText().toString().trim();
-        String category = categoryEditText.getText().toString().trim();
         String year = yearEditText.getText().toString().trim();
         String price = priceEditText.getText().toString().trim();
 
-        if (imageUri == null || title.isEmpty() || desc.isEmpty() || category.isEmpty() || year.isEmpty()) {
-            Toast.makeText(this, "Fill all fields and select an image", Toast.LENGTH_SHORT).show();
+        if (imageUri == null || title.isEmpty() || desc.isEmpty() || year.isEmpty() || price.isEmpty()) {
+            Toast.makeText(this, "Please fill all fields and select an image", Toast.LENGTH_SHORT).show();
             return;
         }
 
         ProgressDialog dialog = new ProgressDialog(this);
         dialog.setMessage("Uploading...");
+        dialog.setCancelable(false);
         dialog.show();
 
         String uniqueId = UUID.randomUUID().toString();
@@ -98,28 +95,30 @@ public class UploadArtwork extends AppCompatActivity {
         imageRef.putFile(imageUri)
                 .addOnSuccessListener(taskSnapshot -> imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
                     String imageUrl = uri.toString();
+                    long timestamp = System.currentTimeMillis();
+                    String artistId = auth.getCurrentUser().getUid();
 
-                    HashMap<String, Object> artworkData = new HashMap<>();
-                    artworkData.put("id", uniqueId);
-                    artworkData.put("title", title);
-                    artworkData.put("description", desc);
-                    artworkData.put("category", category);
-                    artworkData.put("year", year);
-                    artworkData.put("price", price);
-                    artworkData.put("imageUrl", imageUrl);
-                    artworkData.put("artistId", auth.getCurrentUser().getUid());
+                    Artwork artwork = new Artwork(
+                            uniqueId,
+                            title,
+                            desc,
+                            imageUrl,
+                            price,
+                            year,
+                            artistId,
+                            timestamp
+                    );
 
-                    database.getReference("artworks").child(uniqueId).setValue(artworkData)
+                    database.getReference("artworks").child(uniqueId).setValue(artwork)
                             .addOnSuccessListener(unused -> {
                                 dialog.dismiss();
                                 Toast.makeText(this, "Artwork uploaded!", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(UploadArtwork.this,ArtistDashboard.class);
-                                startActivity(intent);
+                                startActivity(new Intent(this, ArtistDashboard.class));
                                 finish();
                             })
                             .addOnFailureListener(e -> {
                                 dialog.dismiss();
-                                Toast.makeText(this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(this, "Failed to upload artwork: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                             });
                 }))
                 .addOnFailureListener(e -> {
