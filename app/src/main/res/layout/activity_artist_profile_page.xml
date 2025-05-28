@@ -8,64 +8,52 @@
     android:orientation="vertical"
     tools:context=".Artist.ArtistProfilePage">
 
-    <ImageView
-        android:id="@+id/backbtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/back"
-        />
-
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        >
+        android:padding="16dp"
+        android:gravity="center_vertical">
 
         <ImageView
+            android:id="@+id/backbtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/back"
+            android:layout_gravity="start"/>
+
+        <ImageView
+            android:id="@+id/artistprofilepicture"
             android:layout_width="95dp"
             android:layout_height="95dp"
             android:src="@drawable/profileimage"
-            android:layout_marginStart="155dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp" />
 
-            />
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/edit"
-            android:layout_marginBottom="60dp"
-            />
-
-    </LinearLayout>
-
-
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginStart="10dp"
-        >
-
-        <TextView
-            android:id="@+id/ArtistUsername"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:text=""
-            android:textStyle="bold"
-            android:textSize="20dp"
-            android:hint="username(Artist)"
-            android:layout_marginTop="0dp"
-            android:layout_marginEnd="80dp"
-            />
+            android:orientation="vertical"
+            android:gravity="center_vertical">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-       android:backgroundTint="@color/silver"
-            android:textColor="@color/black"
-            android:text="Edit Profile"
-            />
+            <TextView
+                android:id="@+id/ArtistUsername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Username (Artist)"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/editprofile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Edit Profile"
+                android:backgroundTint="@color/black"
+                android:textColor="@color/white"
+                android:layout_marginTop="8dp"/>
+        </LinearLayout>
 
 
     </LinearLayout>
@@ -116,8 +104,9 @@
             android:layout_height="match_parent"
             android:textColorHint="@color/black"
             android:hint="Follow the goals ..."
-            android:enabled="false"
+            android:enabled="true"
             android:focusable="false"
+            android:focusableInTouchMode="false"
             android:text=""
             android:layout_marginBottom="20dp"/>
 
@@ -136,21 +125,24 @@
             />
         <EditText
 
+            android:id="@+id/websiteLink"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textColorHint="@color/black"
             android:hint="website:www.janedoeart.com"
-            android:enabled="false"
+            android:enabled="true"
             android:focusable="false"
+            android:focusableInTouchMode="false"
             android:text=""/>
         <EditText
-
+            android:id="@+id/instagramLink"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textColorHint="@color/black"
             android:hint="website:@janedoeart"
-            android:enabled="false"
+            android:enabled="true"
             android:focusable="false"
+            android:focusableInTouchMode="false"
             android:text=""
             android:layout_marginBottom="10dp"/>
 
@@ -170,6 +162,17 @@
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:background="#CCCCCC" />
+
+        <Button
+            android:id="@+id/saveprofile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save Profile"
+            android:visibility="gone"
+            android:backgroundTint="@color/black"
+            android:textColor="@color/white"
+            />
+
 
     </LinearLayout>
 

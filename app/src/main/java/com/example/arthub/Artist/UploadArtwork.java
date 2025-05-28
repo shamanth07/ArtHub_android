@@ -90,8 +90,8 @@ public class UploadArtwork extends AppCompatActivity {
         dialog.setCancelable(false);
         dialog.show();
 
-        String uniqueId = UUID.randomUUID().toString();
-        StorageReference imageRef = storage.getReference().child("artwork_images/" + uniqueId + ".jpg");
+        String artworkId = UUID.randomUUID().toString();
+        StorageReference imageRef = storage.getReference().child("artwork_images/" + artworkId + ".jpg");
 
         imageRef.putFile(imageUri)
                 .addOnSuccessListener(taskSnapshot -> imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
@@ -99,7 +99,7 @@ public class UploadArtwork extends AppCompatActivity {
                     String artistId = auth.getCurrentUser().getUid();
 
                     Artwork artwork = new Artwork(
-                            uniqueId,
+                            artworkId,
                             title,
                             desc,
                             imageUrl,
@@ -111,21 +111,30 @@ public class UploadArtwork extends AppCompatActivity {
                             0
                     );
 
-                    database.getReference("artworks").child(uniqueId).setValue(artwork)
+                    // Save full artwork data under artist's node
+                    DatabaseReference artistArtworksRef = database.getReference()
+                            .child("artists")
+                            .child(artistId)
+                            .child("artworks")
+                            .child(artworkId);
+
+                    artistArtworksRef.setValue(artwork)
                             .addOnSuccessListener(unused -> {
                                 dialog.dismiss();
-                                Toast.makeText(this, "Artwork uploaded!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(this, "Artwork uploaded under artist!", Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(this, ArtistDashboard.class));
                                 finish();
                             })
                             .addOnFailureListener(e -> {
                                 dialog.dismiss();
-                                Toast.makeText(this, "Failed to upload artwork: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(this, "Failed to save artwork: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                             });
+
                 }))
                 .addOnFailureListener(e -> {
                     dialog.dismiss();
                     Toast.makeText(this, "Image upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
+
 }

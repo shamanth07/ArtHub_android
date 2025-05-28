@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.example.arthub.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.*;
 import com.google.firebase.storage.*;
 
@@ -58,8 +59,17 @@ public class EditArtworkPage extends AppCompatActivity {
         artworkId = getIntent().getStringExtra("artworkId");
 
         // fetch  existing artwork data from db
-        if (artworkId != null) {
-            database.getReference("artworks").child(artworkId).addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null && artworkId != null) {
+            String artistId = user.getUid();
+
+            DatabaseReference artworkRef = FirebaseDatabase.getInstance()
+                    .getReference("artists")
+                    .child(artistId)
+                    .child("artworks")
+                    .child(artworkId);
+
+            artworkRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {
                     if (snapshot.exists()) {
@@ -69,7 +79,11 @@ public class EditArtworkPage extends AppCompatActivity {
                         yearEditText.setText(snapshot.child("year").getValue(String.class));
                         priceEditText.setText(snapshot.child("price").getValue(String.class));
                         existingImageUrl = snapshot.child("imageUrl").getValue(String.class);
-                        Glide.with(EditArtworkPage.this).load(existingImageUrl).into(artworkImageView);
+
+                        // Load image using Glide
+                        Glide.with(EditArtworkPage.this)
+                                .load(existingImageUrl)
+                                .into(artworkImageView);
                     }
                 }
 
@@ -79,6 +93,7 @@ public class EditArtworkPage extends AppCompatActivity {
                 }
             });
         }
+
 
         artworkImageView.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -137,6 +152,8 @@ public class EditArtworkPage extends AppCompatActivity {
     }
 
     private void saveArtworkData(String title, String desc, String catg, String year, String price, String imageUrl, ProgressDialog dialog) {
+        String artistId = auth.getCurrentUser().getUid(); // get current artist UID
+
         HashMap<String, Object> updatedData = new HashMap<>();
         updatedData.put("title", title);
         updatedData.put("description", desc);
@@ -144,9 +161,17 @@ public class EditArtworkPage extends AppCompatActivity {
         updatedData.put("year", year);
         updatedData.put("price", price);
         updatedData.put("imageUrl", imageUrl);
-        updatedData.put("artistId", auth.getCurrentUser().getUid());
+        updatedData.put("artistId", artistId);
+        updatedData.put("id", artworkId);
 
-        database.getReference("artworks").child(artworkId).updateChildren(updatedData)
+        // New reference path
+        DatabaseReference artworkRef = database.getReference()
+                .child("artists")
+                .child(artistId)
+                .child("artworks")
+                .child(artworkId);
+
+        artworkRef.updateChildren(updatedData)
                 .addOnSuccessListener(unused -> {
                     dialog.dismiss();
                     Toast.makeText(this, "Artwork updated!", Toast.LENGTH_SHORT).show();
@@ -158,4 +183,5 @@ public class EditArtworkPage extends AppCompatActivity {
                     Toast.makeText(this, "Update failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
+
 }

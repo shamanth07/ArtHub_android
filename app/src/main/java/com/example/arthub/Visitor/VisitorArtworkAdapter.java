@@ -1,6 +1,7 @@
 package com.example.arthub.Visitor;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +54,12 @@ public class VisitorArtworkAdapter extends RecyclerView.Adapter<VisitorArtworkAd
                 .load(artwork.getImageUrl())
                 .placeholder(R.drawable.ic_launcher_background)
                 .into(holder.artworkImage);
+
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context,ArtworkDetailForVisitor.class);
+            intent.putExtra("artworkId", artwork.getId());
+            context.startActivity(intent);
+        });
 
         // Fetch artist name using artistId
         String artistId = artwork.getArtistId();

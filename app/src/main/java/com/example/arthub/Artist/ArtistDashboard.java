@@ -77,7 +77,14 @@ public class ArtistDashboard extends AppCompatActivity {
 
             @Override
             public void onDeleteClick(Artwork artwork) {
-                artworksRef.child(artwork.getId()).removeValue().addOnCompleteListener(task -> {
+                String artistId = currentUser.getUid();
+                DatabaseReference artworkRef = FirebaseDatabase.getInstance()
+                        .getReference("artists")
+                        .child(artistId)
+                        .child("artworks")
+                        .child(artwork.getId());
+
+                artworkRef.removeValue().addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Toast.makeText(ArtistDashboard.this, "Deleted: " + artwork.getTitle(), Toast.LENGTH_SHORT).show();
                         artworkList.remove(artwork);
@@ -87,6 +94,7 @@ public class ArtistDashboard extends AppCompatActivity {
                     }
                 });
             }
+
 
         });
 
@@ -114,9 +122,12 @@ public class ArtistDashboard extends AppCompatActivity {
     }
 
     private void fetchUserArtworks(String artistId) {
-        Query query = dbRef.orderByChild("artistId").equalTo(artistId);
+        DatabaseReference artistArtworksRef = FirebaseDatabase.getInstance()
+                .getReference("artists")
+                .child(artistId)
+                .child("artworks");
 
-        query.addValueEventListener(new ValueEventListener() {
+        artistArtworksRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 artworkList.clear();
@@ -135,5 +146,6 @@ public class ArtistDashboard extends AppCompatActivity {
             }
         });
     }
+
 }
 
