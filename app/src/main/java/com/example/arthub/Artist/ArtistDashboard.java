@@ -43,6 +43,8 @@ public class ArtistDashboard extends AppCompatActivity {
     FirebaseUser currentUser;
 
 
+
+
     private DatabaseReference artworksRef;
 
     @Override
@@ -62,9 +64,6 @@ public class ArtistDashboard extends AppCompatActivity {
         adapter = new ArtworkAdapter(this, artworkList, new ArtworkAdapter.OnArtworkActionListener() {
             @Override
             public void onLikeClick(Artwork artwork) {
-
-
-
                 Toast.makeText(ArtistDashboard.this, "Liked: " + artwork.getTitle(), Toast.LENGTH_SHORT).show();
             }
 
@@ -74,7 +73,6 @@ public class ArtistDashboard extends AppCompatActivity {
                 intent.putExtra("artworkId", artwork.getId());
                 startActivity(intent);
                 Toast.makeText(ArtistDashboard.this, "Edit: " + artwork.getTitle(), Toast.LENGTH_SHORT).show();
-
             }
 
             @Override
@@ -89,7 +87,9 @@ public class ArtistDashboard extends AppCompatActivity {
                     }
                 });
             }
+
         });
+
 
         recyclerViewArtWorks.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewArtWorks.setAdapter(adapter);

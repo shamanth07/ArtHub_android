@@ -106,7 +106,9 @@ public class UploadArtwork extends AppCompatActivity {
                             price,
                             year,
                             artistId,
-                            catg
+                            catg,
+                            0,
+                            0
                     );
 
                     database.getReference("artworks").child(uniqueId).setValue(artwork)

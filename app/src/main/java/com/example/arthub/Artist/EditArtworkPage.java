@@ -54,10 +54,10 @@ public class EditArtworkPage extends AppCompatActivity {
 
         saveArtworkButton.setText("Save");
 
-        // Get artwork ID passed via intent
+
         artworkId = getIntent().getStringExtra("artworkId");
 
-        // Load existing artwork data
+        // fetch  existing artwork data from db
         if (artworkId != null) {
             database.getReference("artworks").child(artworkId).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override

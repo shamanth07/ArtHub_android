@@ -1,6 +1,5 @@
 package com.example.arthub.Artist;
 
-
 import java.io.Serializable;
 
 public class Artwork implements Serializable {
@@ -13,13 +12,16 @@ public class Artwork implements Serializable {
     private String artistId;
     private String category;
 
+    private int likes;
+    private int comments;
 
     // Required empty constructor for Firebase
     public Artwork() {
     }
 
     public Artwork(String id, String title, String description, String imageUrl,
-                   String price, String year, String artistId, String category) {
+                   String price, String year, String artistId, String category,
+                   int likes, int comments) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -28,6 +30,8 @@ public class Artwork implements Serializable {
         this.year = year;
         this.artistId = artistId;
         this.category = category;
+        this.likes = likes;
+        this.comments = comments;
     }
 
     // Getters
@@ -59,13 +63,16 @@ public class Artwork implements Serializable {
         return artistId;
     }
 
-
     public String getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public int getLikes() {
+        return likes;
+    }
+
+    public int getComments() {
+        return comments;
     }
 
     // Setters
@@ -97,6 +104,15 @@ public class Artwork implements Serializable {
         this.artistId = artistId;
     }
 
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
+    public void setLikes(int likes) {
+        this.likes = likes;
+    }
+
+    public void setComments(int comments) {
+        this.comments = comments;
+    }
 }
-

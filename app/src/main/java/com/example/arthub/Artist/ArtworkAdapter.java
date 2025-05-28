@@ -1,3 +1,4 @@
+
 package com.example.arthub.Artist;
 
 
@@ -56,7 +57,7 @@ public class ArtworkAdapter extends RecyclerView.Adapter<ArtworkAdapter.ArtworkV
         assert user != null;
         String useremail = user.getEmail();
 
-            String artistName = useremail != null ? useremail.split("@")[0] : "Unknown";
+        String artistName = useremail != null ? useremail.split("@")[0] : "Unknown";
         holder.artistName.setText(artistName);
 
 
@@ -101,4 +102,3 @@ public class ArtworkAdapter extends RecyclerView.Adapter<ArtworkAdapter.ArtworkV
         void onDeleteClick(Artwork artwork);
     }
 }
-
