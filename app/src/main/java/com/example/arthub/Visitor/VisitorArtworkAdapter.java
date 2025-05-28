@@ -88,6 +88,11 @@ public class VisitorArtworkAdapter extends RecyclerView.Adapter<VisitorArtworkAd
 
 
     }
+    public void updateList(List<Artwork> filteredList) {
+        this.artworkList = filteredList;
+        notifyDataSetChanged();
+    }
+
 
     @Override
     public int getItemCount() {
