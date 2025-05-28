@@ -48,7 +48,7 @@ public class VisitorArtworkAdapter extends RecyclerView.Adapter<VisitorArtworkAd
         holder.likeCount.setText(String.valueOf(artwork.getLikes()));
         holder.commentCount.setText(String.valueOf(artwork.getComments()));
 
-        // Load image using Glide
+
         Glide.with(context)
                 .load(artwork.getImageUrl())
                 .placeholder(R.drawable.ic_launcher_background)
@@ -56,7 +56,7 @@ public class VisitorArtworkAdapter extends RecyclerView.Adapter<VisitorArtworkAd
 
         // Fetch artist name using artistId
         String artistId = artwork.getArtistId();
-        DatabaseReference artistRef = FirebaseDatabase.getInstance().getReference("Users").child(artistId);
+        DatabaseReference artistRef = FirebaseDatabase.getInstance().getReference("users").child(artistId);
 
         artistRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
