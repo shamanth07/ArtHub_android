@@ -78,19 +78,32 @@ public class ArtistDashboard extends AppCompatActivity {
             @Override
             public void onDeleteClick(Artwork artwork) {
                 String artistId = currentUser.getUid();
-                DatabaseReference artworkRef = FirebaseDatabase.getInstance()
+
+                DatabaseReference artistArtworkRef = FirebaseDatabase.getInstance()
                         .getReference("artists")
                         .child(artistId)
                         .child("artworks")
                         .child(artwork.getId());
 
-                artworkRef.removeValue().addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Toast.makeText(ArtistDashboard.this, "Deleted: " + artwork.getTitle(), Toast.LENGTH_SHORT).show();
-                        artworkList.remove(artwork);
-                        adapter.notifyDataSetChanged();
+                DatabaseReference globalArtworkRef = FirebaseDatabase.getInstance()
+                        .getReference("artworks")
+                        .child(artwork.getId());
+
+                // First remove from global node
+                globalArtworkRef.removeValue().addOnCompleteListener(task1 -> {
+                    if (task1.isSuccessful()) {
+                        // Then remove from artist node
+                        artistArtworkRef.removeValue().addOnCompleteListener(task2 -> {
+                            if (task2.isSuccessful()) {
+                                artworkList.remove(artwork);
+                                adapter.notifyDataSetChanged();
+                                Toast.makeText(ArtistDashboard.this, "Deleted: " + artwork.getTitle(), Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(ArtistDashboard.this, "Delete failed in artist node.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     } else {
-                        Toast.makeText(ArtistDashboard.this, "Delete failed.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ArtistDashboard.this, "Delete failed in global node.", Toast.LENGTH_SHORT).show();
                     }
                 });
             }

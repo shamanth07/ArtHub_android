@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.*;
 
 import androidx.annotation.Nullable;
@@ -152,7 +153,7 @@ public class EditArtworkPage extends AppCompatActivity {
     }
 
     private void saveArtworkData(String title, String desc, String catg, String year, String price, String imageUrl, ProgressDialog dialog) {
-        String artistId = auth.getCurrentUser().getUid(); // get current artist UID
+        String artistId = auth.getCurrentUser().getUid();
 
         HashMap<String, Object> updatedData = new HashMap<>();
         updatedData.put("title", title);
@@ -165,21 +166,30 @@ public class EditArtworkPage extends AppCompatActivity {
         updatedData.put("id", artworkId);
 
         // New reference path
-        DatabaseReference artworkRef = database.getReference()
-                .child("artists")
+        DatabaseReference artworkRef = database.getReference();
+                artworkRef.child("artists")
                 .child(artistId)
                 .child("artworks")
-                .child(artworkId);
+                .child(artworkId)
+                        .setValue(updatedData)
+                 .addOnFailureListener(e -> {
+            Log.e("UpdateArtwork", "Failed to update artist node: " + e.getMessage());
+        });
 
-        artworkRef.updateChildren(updatedData)
+        DatabaseReference artworkref = database.getReference();
+        artworkref.child("artworks")
+                .child(artworkId)
+                .setValue(updatedData)
                 .addOnSuccessListener(unused -> {
                     dialog.dismiss();
                     Toast.makeText(this, "Artwork updated!", Toast.LENGTH_SHORT).show();
+
                     startActivity(new Intent(EditArtworkPage.this, ArtistDashboard.class));
                     finish();
                 })
                 .addOnFailureListener(e -> {
                     dialog.dismiss();
+                    Log.e("UpdateArtwork", "Failed to update global node: " + e.getMessage());
                     Toast.makeText(this, "Update failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }

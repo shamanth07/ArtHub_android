@@ -112,16 +112,22 @@ public class UploadArtwork extends AppCompatActivity {
                     );
 
                     // Save full artwork data under artist's node
-                    DatabaseReference artistArtworksRef = database.getReference()
-                            .child("artists")
+                    DatabaseReference artistArtworksRef = database.getReference();
+                    artistArtworksRef.child("artists")
                             .child(artistId)
                             .child("artworks")
-                            .child(artworkId);
+                            .child(artworkId)
+                            .setValue(artwork);
+                       //saving artwork under "artworks"
 
-                    artistArtworksRef.setValue(artwork)
+
+                    DatabaseReference artistartworksref = database.getReference();
+                    artistartworksref.child("artworks")
+                            .child(artworkId)
+                            .setValue(artwork)
                             .addOnSuccessListener(unused -> {
                                 dialog.dismiss();
-                                Toast.makeText(this, "Artwork uploaded under artist!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(this, "Artwork uploaded successfully!", Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(this, ArtistDashboard.class));
                                 finish();
                             })
@@ -129,6 +135,9 @@ public class UploadArtwork extends AppCompatActivity {
                                 dialog.dismiss();
                                 Toast.makeText(this, "Failed to save artwork: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                             });
+
+
+
 
                 }))
                 .addOnFailureListener(e -> {
