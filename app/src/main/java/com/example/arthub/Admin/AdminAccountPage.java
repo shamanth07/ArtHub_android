@@ -25,7 +25,7 @@ public class AdminAccountPage extends AppCompatActivity {
 
     ImageView backbtn;
 
-    TextView adminName,adminprofilebtn;
+    TextView adminName,adminprofilebtn,manageinvitations;
 
 
 
@@ -41,6 +41,7 @@ public class AdminAccountPage extends AppCompatActivity {
 
         adminName = findViewById(R.id.adminName);
         adminprofilebtn = findViewById(R.id.adminprofilebtn);
+        manageinvitations = findViewById(R.id.manageinvitations);
 
 
 
@@ -66,6 +67,12 @@ public class AdminAccountPage extends AppCompatActivity {
             startActivity(intent);
 
         });
+        manageinvitations.setOnClickListener(v -> {
+            Intent intent = new Intent(AdminAccountPage.this,AdminManageInvitations.class);
+            startActivity(intent);
+
+        });
+
 
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();

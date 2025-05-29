@@ -69,6 +69,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Profile"
+                android:textStyle="bold"
                 android:textSize="16sp"
                 android:layout_marginStart="12dp" />
         </LinearLayout>
@@ -97,6 +98,35 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Create Event"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_marginStart="12dp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#CCCCCC" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingVertical="12dp"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/manageinvitations"
+                />
+
+            <TextView
+                android:id="@+id/manageinvitations"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Manage Invitations"
+                android:textStyle="bold"
                 android:textSize="16sp"
                 android:layout_marginStart="12dp" />
         </LinearLayout>
@@ -125,6 +155,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Reports"
+                android:textStyle="bold"
                 android:textSize="16sp"
                 android:layout_marginStart="12dp" />
         </LinearLayout>
@@ -153,6 +184,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Settings"
+                android:textStyle="bold"
                 android:textSize="16sp"
                 android:layout_marginStart="12dp" />
         </LinearLayout>
@@ -175,6 +207,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Logout"
+        android:textStyle="bold"
         android:backgroundTint="#D32F2F"
         android:textColor="@android:color/white"
         android:layout_marginTop="12dp"

@@ -1,6 +1,7 @@
 package com.example.arthub.Artist;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,15 +12,24 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.arthub.Admin.Event;
 import com.example.arthub.R;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 public class ArtistEventAdapter extends RecyclerView.Adapter<ArtistEventAdapter.EventViewHolder> {
 
     private Context context;
     private List<Event> eventList;
     private OnApplyClickListener listener;
+
+    private Set<String> appliedEventIds = new HashSet<>();
+
+
+
+
 
     public interface OnApplyClickListener {
         void onApplyClick(Event event);
@@ -41,14 +51,24 @@ public class ArtistEventAdapter extends RecyclerView.Adapter<ArtistEventAdapter.
     @Override
     public void onBindViewHolder(@NonNull EventViewHolder holder, int position) {
         Event event = eventList.get(position);
+
         holder.titleTextView.setText(event.getTitle());
         holder.dateTextView.setText(formatDate(event.getEventDate()) + " - " + event.getTime());
+
 
         holder.applyButton.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onApplyClick(event);
             }
+
+            // Change button text
+            holder.applyButton.setText("Event Applied");
+
+            // Disable the button
+            holder.applyButton.setEnabled(false);
+            holder.applyButton.setBackgroundColor(Color.LTGRAY);
         });
+
     }
 
     @Override
@@ -58,13 +78,14 @@ public class ArtistEventAdapter extends RecyclerView.Adapter<ArtistEventAdapter.
 
     public static class EventViewHolder extends RecyclerView.ViewHolder {
         TextView titleTextView, dateTextView;
-        Button applyButton;
+        Button applyButton, eventAppliedButton;
 
         public EventViewHolder(@NonNull View itemView) {
             super(itemView);
             titleTextView = itemView.findViewById(R.id.EventTitle);
             dateTextView = itemView.findViewById(R.id.EventDateTime);
             applyButton = itemView.findViewById(R.id.applyButton);
+            eventAppliedButton = itemView.findViewById(R.id.Eventapplied);
         }
     }
 
