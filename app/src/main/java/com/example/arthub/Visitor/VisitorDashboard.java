@@ -2,6 +2,7 @@ package com.example.arthub.Visitor;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.SearchView;
 
@@ -9,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.arthub.Artist.Artwork;
+import com.example.arthub.Admin.Event;
 import com.example.arthub.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,76 +23,54 @@ import java.util.List;
 
 public class VisitorDashboard extends AppCompatActivity {
 
-    ImageView menuIcon,notificationforvisitor;
-    RecyclerView recyclerViewvisitorartworks;
-
-    SearchView searchartist;
-    VisitorArtworkAdapter adapter;
-    List<Artwork> artworkList;
 
 
+    ImageView menuIcon;
+
+
+
+    private RecyclerView recyclerViewvisitortEvents;
+    private VisitorEventAdapter adapter;
+    private List<Event> eventList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visitor_dashboard);
 
+
+
+
+
+
+
         menuIcon = findViewById(R.id.menuIcon);
-        notificationforvisitor = findViewById(R.id.notificationforvisitor);
-        searchartist = findViewById(R.id.searchartist);
-        recyclerViewvisitorartworks = findViewById(R.id.recyclerViewvisitorartworks);
+        recyclerViewvisitortEvents = findViewById(R.id.recyclerViewvisitortEvents);
+        recyclerViewvisitortEvents.setLayoutManager(new LinearLayoutManager(this));
+        eventList = new ArrayList<>();
+        adapter = new VisitorEventAdapter(this, eventList);
+        recyclerViewvisitortEvents.setAdapter(adapter);
+
 
         menuIcon.setOnClickListener(v -> {
             Intent intent = new Intent(VisitorDashboard.this, VisitorAccountPage.class);
             startActivity(intent);
         });
-        
-        
-        searchartist.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                filterArtworks(query);
-                return true;
-            }
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                filterArtworks(newText);
-                return true;
-            }
-            private void filterArtworks(String query) {
-                List<Artwork> filteredList = new ArrayList<>();
-                for (Artwork artwork : artworkList) {
-                    if (artwork.getTitle().toLowerCase().contains(query.toLowerCase()) ||
-                            artwork.getArtistId().toLowerCase().contains(query.toLowerCase())) {
-                        filteredList.add(artwork);
-                    }
-                }
-                adapter.updateList(filteredList);
-            }
-        });
-        
-        
 
-        recyclerViewvisitorartworks.setLayoutManager(new LinearLayoutManager(this));
-        artworkList = new ArrayList<>();
-        adapter = new VisitorArtworkAdapter(this, artworkList);
-        recyclerViewvisitorartworks.setAdapter(adapter);
-
-        loadArtworksFromFirebase();
+        loadEventsFromFirebase();
     }
-     
 
-    private void loadArtworksFromFirebase() {
-        DatabaseReference artworksRef = FirebaseDatabase.getInstance().getReference("artworks");
+    private void loadEventsFromFirebase() {
+        DatabaseReference eventsRef = FirebaseDatabase.getInstance().getReference("events");
 
-        artworksRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        eventsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                artworkList.clear();
+                eventList.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    Artwork artwork = dataSnapshot.getValue(Artwork.class);
-                    if (artwork != null) {
-                        artworkList.add(artwork);
+                    Event event = dataSnapshot.getValue(Event.class);
+                    if (event != null) {
+                        eventList.add(event);
                     }
                 }
                 adapter.notifyDataSetChanged();
@@ -99,13 +78,8 @@ public class VisitorDashboard extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError error) {
-
+                Log.e("VisitorDashboard", "Failed to load events", error.toException());
             }
         });
     }
-
-
-
-
-
 }

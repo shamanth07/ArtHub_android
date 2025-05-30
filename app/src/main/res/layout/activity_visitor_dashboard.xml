@@ -49,7 +49,7 @@
         android:orientation="horizontal"
         >
         <SearchView
-            android:id="@+id/searchartist"
+            android:id="@+id/searchevents"
             android:layout_width="380dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -60,7 +60,7 @@
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewvisitorartworks"
+        android:id="@+id/recyclerViewvisitortEvents"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
