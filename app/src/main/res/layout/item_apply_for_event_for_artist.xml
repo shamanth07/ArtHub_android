@@ -33,12 +33,5 @@
         android:backgroundTint="@color/blue"
         android:layout_marginTop="6dp"/>
 
-    <Button
-        android:id="@+id/Eventapplied"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Event Applied"
-        android:backgroundTint="@color/blue"
-        android:visibility="gone"
-        />
+
 </LinearLayout>

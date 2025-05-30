@@ -114,7 +114,7 @@ public class ArtistApplyForEvent extends AppCompatActivity {
                     appliedEventIds.add(eventSnapshot.getKey());
                 }
             }
-            adapter.notifyDataSetChanged();
+            adapter.setAppliedEventIds(appliedEventIds);
         }).addOnFailureListener(e -> {
             Log.e("loadAppliedEvents", "Failed to fetch applied events", e);
         });
@@ -158,10 +158,13 @@ public class ArtistApplyForEvent extends AppCompatActivity {
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 Toast.makeText(this, "Applied to " + event.getTitle(), Toast.LENGTH_SHORT).show();
+                                appliedEventIds.add(event.getEventId());
+                                adapter.notifyDataSetChanged();
                             } else {
                                 Toast.makeText(this, "Failed to apply", Toast.LENGTH_SHORT).show();
                             }
                         });
+
             }
         }).addOnFailureListener(e -> {
             Toast.makeText(this, "Failed to check existing applicants", Toast.LENGTH_SHORT).show();
