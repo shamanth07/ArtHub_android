@@ -18,14 +18,14 @@ import java.util.List;
 
 public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.InviteViewHolder> {
 
-    private List<String> keys;
+    private List<String> compositeKeys; // format: "eventId/artistId"
     private List<Invitation> invitations;
-    private DatabaseReference dbRef;
+    private DatabaseReference dbRef;      // reference to "invitations" node
+    private DatabaseReference eventDbRef; // reference to "events" node
 
-    private DatabaseReference eventDbRef;
-
-    public InvitationAdapter(List<String> keys, List<Invitation> invitations, DatabaseReference dbRef,DatabaseReference eventDbRef) {
-        this.keys = keys;
+    public InvitationAdapter(List<String> compositeKeys, List<Invitation> invitations,
+                             DatabaseReference dbRef, DatabaseReference eventDbRef) {
+        this.compositeKeys = compositeKeys;
         this.invitations = invitations;
         this.dbRef = dbRef;
         this.eventDbRef = eventDbRef;
@@ -41,52 +41,71 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.In
 
     @Override
     public void onBindViewHolder(@NonNull InviteViewHolder holder, int position) {
-        String key = keys.get(position);
+        String compositeKey = compositeKeys.get(position);
         Invitation invite = invitations.get(position);
 
-        String status = invite.status != null ? invite.status : "pending";
-        String artistname = invite.artistName != null ? invite.artistName : "Unknown Artist";
-        String Email = invite.email != null ? invite.email : "No email provided";
+        if (invite == null) {
+            holder.artistName.setText("Artist: Unknown");
+            holder.email.setText("Email: Unknown");
+            holder.status.setText("Status: Unknown");
+            holder.eventName.setText("Event: Unknown");
+            return;
+        }
 
-        holder.artistName.setText("Artist: " + artistname);
-        holder.email.setText("Email: " + Email);
+        holder.artistName.setText("Artist: " + (invite.getArtistName() != null ? invite.getArtistName() : "Unknown"));
+        holder.email.setText("Email: " + (invite.getEmail() != null ? invite.getEmail() : "Unknown"));
+        String status = invite.getStatus() != null ? invite.getStatus() : "pending";
         holder.status.setText("Status: " + status.toUpperCase());
 
-        // 🔹 Fetch Event Name using event ID (key)
-        eventDbRef.child(key).child("title").get().addOnSuccessListener(snapshot -> {
-            if (snapshot.exists()) {
-                String eventName = snapshot.getValue(String.class);
-                holder.eventName.setText("Event: " + eventName);
-            } else {
-                holder.eventName.setText("Event: Unknown");
-            }
-        }).addOnFailureListener(e -> holder.eventName.setText("Event: Error"));
+
+        if (invite.getEventId() != null && !invite.getEventId().isEmpty()) {
+            eventDbRef.child(invite.getEventId()).child("title").get()
+                    .addOnSuccessListener(snapshot -> {
+                        if (snapshot.exists()) {
+                            String eventName = snapshot.getValue(String.class);
+                            holder.eventName.setText("Event: " + eventName);
+                        } else {
+                            holder.eventName.setText("Event: Unknown");
+                        }
+                    })
+                    .addOnFailureListener(e -> holder.eventName.setText("Event: Error"));
+        } else {
+            holder.eventName.setText("Event: Unknown");
+        }
 
 
         if ("accepted".equalsIgnoreCase(status)) {
             holder.btnAccept.setVisibility(View.GONE);
             holder.btnReject.setVisibility(View.GONE);
             holder.btnConfirmed.setVisibility(View.VISIBLE);
-            holder.btnAccept.setEnabled(false);
-            holder.btnReject.setEnabled(false);
+            holder.btnConfirmed.setText("Confirmed");
+            holder.btnConfirmed.setEnabled(false);
         } else if ("rejected".equalsIgnoreCase(status)) {
-            holder.btnAccept.setVisibility(View.VISIBLE);
+            holder.btnAccept.setVisibility(View.GONE);
             holder.btnReject.setVisibility(View.VISIBLE);
-            holder.btnConfirmed.setVisibility(View.GONE);
-            holder.btnAccept.setEnabled(true);
+            holder.btnReject.setText("Rejected");
             holder.btnReject.setEnabled(false);
+            holder.btnConfirmed.setVisibility(View.GONE);
         } else {
             holder.btnAccept.setVisibility(View.VISIBLE);
             holder.btnReject.setVisibility(View.VISIBLE);
-            holder.btnConfirmed.setVisibility(View.GONE);
-            holder.btnAccept.setEnabled(true);
+            holder.btnReject.setText("Reject");
             holder.btnReject.setEnabled(true);
+            holder.btnConfirmed.setVisibility(View.GONE);
         }
 
+
+
         holder.btnAccept.setOnClickListener(v -> {
-            dbRef.child(key).child("status").setValue("accepted");
-            invite.status = "accepted";
-            notifyItemChanged(position);
+            // Update status in Firebase using composite key split
+            String[] parts = compositeKey.split("/");
+            if (parts.length == 2) {
+                String eventId = parts[0];
+                String artistId = parts[1];
+                dbRef.child(eventId).child(artistId).child("status").setValue("accepted");
+                invite.setStatus("accepted");
+                notifyItemChanged(position);
+            }
         });
 
         holder.btnReject.setOnClickListener(v -> {
@@ -94,17 +113,19 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.In
                     .setTitle("Confirm Rejection")
                     .setMessage("Are you sure you want to reject this invitation?")
                     .setPositiveButton("Yes", (dialog, which) -> {
-                        dbRef.child(key).child("status").setValue("rejected");
-                        invite.status = "rejected";
-                        notifyItemChanged(position);
+                        String[] parts = compositeKey.split("/");
+                        if (parts.length == 2) {
+                            String eventId = parts[0];
+                            String artistId = parts[1];
+                            dbRef.child(eventId).child(artistId).child("status").setValue("rejected");
+                            invite.setStatus("rejected");
+                            notifyItemChanged(position);
+                        }
                     })
                     .setNegativeButton("Cancel", null)
                     .show();
         });
     }
-
-
-
 
     @Override
     public int getItemCount() {
