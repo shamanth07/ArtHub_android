@@ -71,6 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Profile"
+                android:textStyle="bold"
                 android:textSize="16sp"
                 android:layout_marginStart="12dp" />
         </LinearLayout>
@@ -92,14 +93,15 @@
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/bookevent"
+                android:src="@drawable/artdiscovery"
                 />
 
             <TextView
-                android:id="@+id/bookaneventid"
+                android:id="@+id/artdiscoveryid"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Book an Event"
+                android:text="Art Discovery"
+                android:textStyle="bold"
                 android:textSize="16sp"
                 android:layout_marginStart="12dp" />
         </LinearLayout>
@@ -128,6 +130,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Booking History"
+                android:textStyle="bold"
                 android:textSize="16sp"
                 android:layout_marginStart="12dp" />
         </LinearLayout>
@@ -178,6 +181,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Logout"
+        android:textStyle="bold"
         android:backgroundTint="#D32F2F"
         android:textColor="@android:color/white"
         android:layout_marginTop="12dp"

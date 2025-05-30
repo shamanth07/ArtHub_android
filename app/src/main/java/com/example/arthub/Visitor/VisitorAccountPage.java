@@ -24,7 +24,7 @@ public class VisitorAccountPage extends AppCompatActivity {
 
     ImageView backbtn;
     Button btnLogout;
-    TextView visitorName,visitorprofile,bookaneventid;
+    TextView visitorName,visitorprofile,artdiscoveryid;
 
 
     @Override
@@ -39,7 +39,7 @@ public class VisitorAccountPage extends AppCompatActivity {
         btnLogout = findViewById(R.id.btnLogout);
         visitorName = findViewById(R.id.visitorName);
         visitorprofile = findViewById(R.id.visitorprofile);
-        bookaneventid = findViewById(R.id.bookaneventid);
+        artdiscoveryid = findViewById(R.id.artdiscoveryid);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
@@ -61,6 +61,11 @@ public class VisitorAccountPage extends AppCompatActivity {
         });
         visitorprofile.setOnClickListener(v -> {
             Intent intent = new Intent(VisitorAccountPage.this, VisitorProfilePage.class);
+            startActivity(intent);
+
+        });
+        artdiscoveryid.setOnClickListener(v -> {
+            Intent intent = new Intent(VisitorAccountPage.this, VisitorArtDiscoveryPage.class);
             startActivity(intent);
 
         });
