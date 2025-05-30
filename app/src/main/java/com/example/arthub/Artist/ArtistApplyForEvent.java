@@ -26,12 +26,12 @@ public class ArtistApplyForEvent extends AppCompatActivity {
 
     ImageView backbtn;
 
-    Button Eventapplied;
 
 
 
 
-    private  String artistName,email;
+
+
 
     private Set<String> appliedEventIds = new HashSet<>();
 
@@ -133,7 +133,7 @@ public class ArtistApplyForEvent extends AppCompatActivity {
                 .getReference("invitations")
                 .child(event.getEventId());
 
-        // Count how many artists have already applied
+        // checking many artists have already applied
         invitationRef.get().addOnSuccessListener(snapshot -> {
             int currentApplicants = 0;
 
@@ -147,7 +147,7 @@ public class ArtistApplyForEvent extends AppCompatActivity {
             if (currentApplicants >= event.getMaxArtists()) {
                 Toast.makeText(this, "Application limit reached for this event", Toast.LENGTH_SHORT).show();
             } else {
-                // Allow this artist to apply
+                // Allowing  the artist to apply
                 Map<String, Object> invitationData = new HashMap<>();
                 invitationData.put("artistName", artistName);
                 invitationData.put("email", email);
