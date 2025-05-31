@@ -14,14 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.arthub.Artist.Artwork;
 import com.example.arthub.R;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class VisitorArtworkAdapter extends RecyclerView.Adapter<VisitorArtworkAdapter.ViewHolder> {
@@ -36,74 +30,45 @@ public class VisitorArtworkAdapter extends RecyclerView.Adapter<VisitorArtworkAd
 
     @NonNull
     @Override
-    public VisitorArtworkAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_visitor_artwork, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull VisitorArtworkAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Artwork artwork = artworkList.get(position);
 
         holder.artworkTitle.setText(artwork.getTitle());
+
+
+        String artistEmail = artwork.getArtistId();
+        String displayName = artistEmail.split("@")[0];
+        holder.artistName.setText(displayName);
         holder.likeCount.setText(String.valueOf(artwork.getLikes()));
         holder.commentCount.setText(String.valueOf(artwork.getComments()));
-
 
         Glide.with(context)
                 .load(artwork.getImageUrl())
                 .placeholder(R.drawable.ic_launcher_background)
                 .into(holder.artworkImage);
 
+
         holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context,ArtworkDetailForVisitor.class);
+            Intent intent = new Intent(context, ArtworkDetailForVisitor.class);
             intent.putExtra("artworkId", artwork.getId());
             context.startActivity(intent);
         });
-
-        // Fetch artist name using artistId
-        String artistId = artwork.getArtistId();
-        DatabaseReference artistRef = FirebaseDatabase.getInstance().getReference("users").child(artistId);
-
-        artistRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    String role = snapshot.child("role").getValue(String.class);
-                    if (role != null && role.equalsIgnoreCase("artist")) {
-                        String email = snapshot.child("email").getValue(String.class);
-                        if (email != null && email.contains("@")) {
-                            String extractedName = email.split("@")[0];
-                            holder.artistName.setText(extractedName);
-                        } else {
-                            holder.artistName.setText("Unknown Artist");
-                        }
-                    } else {
-                        holder.artistName.setText("Unknown Artist");
-                    }
-                } else {
-                    holder.artistName.setText("Unknown Artist");
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                holder.artistName.setText("Unknown Artist");
-            }
-        });
-
-
-
     }
-    public void updateList(List<Artwork> filteredList) {
-        this.artworkList = filteredList;
-        notifyDataSetChanged();
-    }
-
 
     @Override
     public int getItemCount() {
         return artworkList.size();
+    }
+
+    public void updateList(List<Artwork> newList) {
+        this.artworkList = new ArrayList<>(newList);
+        notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
