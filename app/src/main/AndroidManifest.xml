@@ -54,6 +54,8 @@
         <activity
             android:name=".Admin.CreateEvent"
             android:exported="false" />
+        <activity android:name=".Visitor.ArtworkDetailForVisitor"
+            android:exported="false"/>
         <activity
             android:name=".Visitor.VisitorDashboard"
             android:exported="false" />

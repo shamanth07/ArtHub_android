@@ -68,26 +68,24 @@ public class ArtistStatusPage extends AppCompatActivity {
                                         itemList.add(new ArtistInvitationItem(invitation, event));
                                         adapter.notifyDataSetChanged();
                                     }
-                                    progressBar.setVisibility(View.GONE);
+
                                 }
 
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError error) {
-                                    progressBar.setVisibility(View.GONE);
+
                                 }
                             });
                         }
                     }
                 }
 
-                if (itemList.isEmpty()) {
-                    progressBar.setVisibility(View.GONE);
-                }
+
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                progressBar.setVisibility(View.GONE);
+
             }
         });
     }
