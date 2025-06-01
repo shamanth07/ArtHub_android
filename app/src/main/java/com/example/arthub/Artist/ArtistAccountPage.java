@@ -2,6 +2,7 @@ package com.example.arthub.Artist;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,16 +18,11 @@ import com.example.arthub.Auth.SignIn;
 import com.example.arthub.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
-public class ArtistAccountPage extends AppCompatActivity {
+public class ArtistAccountPage extends AppCompatActivity implements View.OnClickListener {
 
     Button btnLogout;
-
     ImageView backbtn;
-
-    TextView artistName,artistprofile,applyforevent;
-
-
+    TextView artistName, artistprofile, applyforevent, artiststatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,32 +35,14 @@ public class ArtistAccountPage extends AppCompatActivity {
         artistName = findViewById(R.id.artistName);
         artistprofile = findViewById(R.id.artistprofile);
         applyforevent = findViewById(R.id.applyforevent);
+        artiststatus = findViewById(R.id.artiststatus);
 
-
-        btnLogout.setOnClickListener(v -> {
-            FirebaseAuth.getInstance().signOut();
-            Toast.makeText(this, "Successfully logged out", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(ArtistAccountPage.this, SignIn.class);
-            startActivity(intent);
-            finish();
-        });
-
-        backbtn.setOnClickListener(v -> {
-            Intent intent = new Intent(ArtistAccountPage.this, ArtistDashboard.class);
-            startActivity(intent);
-            finish();
-        });
-
-        applyforevent.setOnClickListener(v -> {
-            Intent intent = new Intent(ArtistAccountPage.this, ArtistApplyForEvent.class);
-            startActivity(intent);
-        });
-
-        artistprofile.setOnClickListener(v -> {
-            Intent intent = new Intent(ArtistAccountPage.this, ArtistProfilePage.class);
-            startActivity(intent);
-        });
-
+        // Set the same OnClickListener to all clickable views
+        btnLogout.setOnClickListener(this);
+        backbtn.setOnClickListener(this);
+        applyforevent.setOnClickListener(this);
+        artiststatus.setOnClickListener(this);
+        artistprofile.setOnClickListener(this);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
@@ -75,12 +53,29 @@ public class ArtistAccountPage extends AppCompatActivity {
             }
             artistName.setText(username + "(artist)");
         }
+    }
 
-
-
-
-
-
-
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        if (id == R.id.btnLogout) {
+            FirebaseAuth.getInstance().signOut();
+            Toast.makeText(this, "Successfully logged out", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, SignIn.class);
+            startActivity(intent);
+            finish();
+        } else if (id == R.id.backbtn) {
+            Intent intent = new Intent(this, ArtistDashboard.class);
+            startActivity(intent);
+        } else if (id == R.id.applyforevent) {
+            Intent intent = new Intent(this, ArtistApplyForEvent.class);
+            startActivity(intent);
+        } else if (id == R.id.artiststatus) {
+            Intent intent = new Intent(this, ArtistStatusPage.class);
+            startActivity(intent);
+        } else if (id == R.id.artistprofile) {
+            Intent intent = new Intent(this, ArtistProfilePage.class);
+            startActivity(intent);
+        }
     }
 }

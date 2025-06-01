@@ -13,6 +13,9 @@
         android:theme="@style/Theme.Arthub"
         tools:targetApi="31">
         <activity
+            android:name=".Artist.ArtistStatusPage"
+            android:exported="false" />
+        <activity
             android:name=".Visitor.VisitorArtDiscoveryPage"
             android:exported="false" />
         <activity
