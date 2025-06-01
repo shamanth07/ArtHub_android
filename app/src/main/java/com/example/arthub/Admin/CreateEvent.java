@@ -36,7 +36,7 @@ import java.util.Calendar;
 public class CreateEvent extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final int PICK_IMAGE_REQUEST = 1;
-    private EditText titleInput, descriptionInput, timeInput, maxArtistsInput;
+    private EditText titleInput, descriptionInput, timeInput, maxArtistsInput,priceid;
 
     private DatePicker datePicker;
     private ImageView bannerImage;
@@ -47,6 +47,8 @@ public class CreateEvent extends AppCompatActivity implements OnMapReadyCallback
     private SupportMapFragment mapFragment;
 
     private String selectedEventLocation;
+
+
 
 
     private LatLng selectedLatLng;
@@ -63,6 +65,7 @@ public class CreateEvent extends AppCompatActivity implements OnMapReadyCallback
         maxArtistsInput = findViewById(R.id.maxArtistsInput);
         datePicker = findViewById(R.id.datePicker);
         bannerImage = findViewById(R.id.uploadImage);
+        priceid =  findViewById(R.id.priceid);
 
 
         storageRef = FirebaseStorage.getInstance().getReference("event_banners");
@@ -152,6 +155,10 @@ public class CreateEvent extends AppCompatActivity implements OnMapReadyCallback
     }
 
     private void saveEventToDatabase(String eventId, String bannerImageUrl) {
+
+
+
+
         String title = titleInput.getText().toString().trim();
         String description = descriptionInput.getText().toString().trim();
         String time = timeInput.getText().toString().trim();
@@ -171,8 +178,28 @@ public class CreateEvent extends AppCompatActivity implements OnMapReadyCallback
 
         double latitude = selectedLatLng.latitude;
         double longitude = selectedLatLng.longitude;
+        String priceString = priceid.getText().toString().trim();
 
-        Event event = new Event(eventId, title, description, eventDate, time, maxArtists, bannerImageUrl,locationName,latitude, longitude);
+        double price;
+        try {
+            price = Double.parseDouble(priceString);
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Please enter a valid price", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (price < 0) {
+            Toast.makeText(this, "Price cannot be negative", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (title.isEmpty() || description.isEmpty() || time.isEmpty() || maxArtistsInput.getText().toString().trim().isEmpty()) {
+            Toast.makeText(this, "Please fill in all required fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+
+        Event event = new Event(eventId, title, description, eventDate, time, maxArtists, bannerImageUrl,locationName,latitude, longitude,price);
 
         eventsRef.child(eventId).setValue(event)
                 .addOnSuccessListener(unused -> {

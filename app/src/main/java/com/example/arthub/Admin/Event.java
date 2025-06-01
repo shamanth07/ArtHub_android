@@ -18,9 +18,12 @@ public class Event implements Serializable {
     public double latitude;
     public double longitude;
 
+    public double price;
+
+
     public Event() {}
 
-    public Event(String eventId, String title, String description, long date, String time, int maxArtists, String bannerImageUrl,String locationName, double latitude, double longitude) {
+    public Event(String eventId, String title, String description, long date, String time, int maxArtists, String bannerImageUrl,String locationName, double latitude, double longitude,double price) {
         this.eventId = eventId;
         this.title = title;
         this.description = description;
@@ -32,6 +35,8 @@ public class Event implements Serializable {
 
         this.latitude = latitude;
         this.longitude = longitude;
+        this.price = price;
+
     }
 
     public String getEventId() {
@@ -112,5 +117,13 @@ public class Event implements Serializable {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }

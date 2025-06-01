@@ -40,7 +40,7 @@ public class EditEvent extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final int PICK_IMAGE_REQUEST = 1;
 
-    private EditText titleInput, descriptionInput, timeInput, maxArtistsInput;
+    private EditText titleInput, descriptionInput, timeInput, maxArtistsInput,priceid;
     private DatePicker datePicker;
     private ImageView bannerImage;
     private Button actionButton;
@@ -70,6 +70,7 @@ public class EditEvent extends AppCompatActivity implements OnMapReadyCallback {
         maxArtistsInput = findViewById(R.id.maxArtistsInput);
         datePicker = findViewById(R.id.datePicker);
         bannerImage = findViewById(R.id.uploadImage);
+        priceid = findViewById(R.id.priceid);
 
         actionButton = findViewById(R.id.createButton);
 
@@ -157,6 +158,7 @@ public class EditEvent extends AppCompatActivity implements OnMapReadyCallback {
 
         latitude = event.getLatitude();
         longitude = event.getLongitude();
+        priceid.setText(String.valueOf(event.getPrice()));
     }
 
     private void openImagePicker() {
@@ -199,6 +201,7 @@ public class EditEvent extends AppCompatActivity implements OnMapReadyCallback {
         String description = descriptionInput.getText().toString().trim();
         String time = timeInput.getText().toString().trim();
         int maxArtists = Integer.parseInt(maxArtistsInput.getText().toString().trim());
+        double  price = Double.parseDouble(priceid.getText().toString().trim());
 
 
         Calendar cal = Calendar.getInstance();
@@ -209,18 +212,18 @@ public class EditEvent extends AppCompatActivity implements OnMapReadyCallback {
             StorageReference imageRef = storageRef.child("banner_" + eventId + ".jpg");
             imageRef.putFile(selectedImageUri).addOnSuccessListener(taskSnapshot ->
                     imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                        saveUpdatedEvent(eventId, title, description, dateMillis, time, maxArtists, uri.toString(),selectedEventLocation, latitude, longitude);
+                        saveUpdatedEvent(eventId, title, description, dateMillis, time, maxArtists, uri.toString(),selectedEventLocation, latitude, longitude,price);
                     })
             ).addOnFailureListener(e ->
                     Toast.makeText(this, "Image upload failed: " + e.getMessage(), Toast.LENGTH_LONG).show()
             );
         } else {
-            saveUpdatedEvent(eventId, title, description, dateMillis, time, maxArtists, existingEvent.getBannerImageUrl(),selectedEventLocation, latitude, longitude);
+            saveUpdatedEvent(eventId, title, description, dateMillis, time, maxArtists, existingEvent.getBannerImageUrl(),selectedEventLocation, latitude, longitude,price);
         }
     }
 
-    private void saveUpdatedEvent(String eventId, String title, String description, long date, String time, int maxArtists, String bannerUrl, String selectedEventLocation,double latitude, double longitude) {
-        Event updatedEvent = new Event(eventId, title, description, date, time, maxArtists, bannerUrl,selectedEventLocation,latitude, longitude);
+    private void saveUpdatedEvent(String eventId, String title, String description, long date, String time, int maxArtists, String bannerUrl, String selectedEventLocation,double latitude, double longitude,double price) {
+        Event updatedEvent = new Event(eventId, title, description, date, time, maxArtists, bannerUrl,selectedEventLocation,latitude, longitude,price);
 
         eventsRef.child(eventId).setValue(updatedEvent)
                 .addOnSuccessListener(unused -> {
