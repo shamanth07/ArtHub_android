@@ -13,6 +13,9 @@
         android:theme="@style/Theme.Arthub"
         tools:targetApi="31">
         <activity
+            android:name=".Visitor.VisitorEventDetail"
+            android:exported="false" />
+        <activity
             android:name=".Artist.ArtistStatusPage"
             android:exported="false" />
         <activity
@@ -54,8 +57,9 @@
         <activity
             android:name=".Admin.CreateEvent"
             android:exported="false" />
-        <activity android:name=".Visitor.ArtworkDetailForVisitor"
-            android:exported="false"/>
+        <activity
+            android:name=".Visitor.ArtworkDetailForVisitor"
+            android:exported="false" />
         <activity
             android:name=".Visitor.VisitorDashboard"
             android:exported="false" />

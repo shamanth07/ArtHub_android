@@ -51,11 +51,11 @@ public class VisitorEventAdapter extends RecyclerView.Adapter<VisitorEventAdapte
         Glide.with(context).load(event.getBannerImageUrl()).into(holder.bannerImageView);
 
 
-//        holder.itemView.setOnClickListener(v -> {
-//            Intent intent = new Intent(context, EventDetailActivity.class);
-//            intent.putExtra("event", event);
-//            context.startActivity(intent);
-//        });
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, VisitorEventDetail.class);
+            intent.putExtra("event", event);
+            context.startActivity(intent);
+        });
     }
 
     @Override
