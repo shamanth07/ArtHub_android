@@ -22,7 +22,7 @@ public class ArtistAccountPage extends AppCompatActivity implements View.OnClick
 
     Button btnLogout;
     ImageView backbtn;
-    TextView artistName, artistprofile, applyforevent, artiststatus;
+    TextView artistName, artistprofile, applyforevent, artiststatus,favartworks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,13 +36,15 @@ public class ArtistAccountPage extends AppCompatActivity implements View.OnClick
         artistprofile = findViewById(R.id.artistprofile);
         applyforevent = findViewById(R.id.applyforevent);
         artiststatus = findViewById(R.id.artiststatus);
+        favartworks = findViewById(R.id.favartworks);
 
-        // Set the same OnClickListener to all clickable views
+
         btnLogout.setOnClickListener(this);
         backbtn.setOnClickListener(this);
         applyforevent.setOnClickListener(this);
         artiststatus.setOnClickListener(this);
         artistprofile.setOnClickListener(this);
+        favartworks.setOnClickListener(this);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {

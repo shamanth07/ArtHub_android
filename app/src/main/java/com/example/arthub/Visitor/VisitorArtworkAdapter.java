@@ -323,10 +323,11 @@ public class VisitorArtworkAdapter extends RecyclerView.Adapter<VisitorArtworkAd
     }
 
 
-    public void updateList(List<Artwork> newArtworkList) {
-        artworkList = newArtworkList;
+    public void updateList(List<Artwork> newList) {
+        this.artworkList = newList;
         notifyDataSetChanged();
     }
+
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView artworkImage, likeIcon, commentIcon;

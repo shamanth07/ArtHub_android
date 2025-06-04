@@ -17,8 +17,8 @@ import com.google.firebase.database.ValueEventListener;
 
 public class ArtworkDetailForVisitor extends AppCompatActivity {
 
-    private ImageView artworkImage, likeIcon, commentIcon;
-    private TextView title, artistName, likeCount, commentCount, description, instagramLink, websiteLink;
+    private ImageView artworkImage;
+    private TextView title, artistName, description, instagramLink, websiteLink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,10 +30,6 @@ public class ArtworkDetailForVisitor extends AppCompatActivity {
         artworkImage = findViewById(R.id.artworkImage);
         title = findViewById(R.id.artworkTitle);
         artistName = findViewById(R.id.artistName);
-        likeCount = findViewById(R.id.likeCount);
-        commentCount = findViewById(R.id.commentCount);
-        likeIcon = findViewById(R.id.likeIcon);
-        commentIcon = findViewById(R.id.commentIcon);
         description = findViewById(R.id.artworkDescription);
         instagramLink = findViewById(R.id.instagramLink);
         websiteLink = findViewById(R.id.websiteLink);
@@ -50,8 +46,7 @@ public class ArtworkDetailForVisitor extends AppCompatActivity {
                         if (artwork != null) {
                             title.setText(artwork.getTitle());
                             description.setText(artwork.getDescription());
-                            likeCount.setText(String.valueOf(artwork.getLikes()));
-                            commentCount.setText(String.valueOf(artwork.getComments()));
+
 
                             Glide.with(ArtworkDetailForVisitor.this)
                                     .load(artwork.getImageUrl())

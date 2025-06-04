@@ -1,15 +1,12 @@
-
 package com.example.arthub.Artist;
 
-
-
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -44,34 +41,32 @@ public class ArtworkAdapter extends RecyclerView.Adapter<ArtworkAdapter.ArtworkV
     public void onBindViewHolder(@NonNull ArtworkViewHolder holder, int position) {
         Artwork artwork = artworkList.get(position);
 
-        // Load image
+
         Glide.with(context)
                 .load(artwork.getImageUrl())
-                .placeholder(R.drawable.ic_launcher_background) // optional
+                .placeholder(R.drawable.ic_launcher_background)
                 .into(holder.artworkImage);
 
-        // Set title
-        holder.artworkTitle.setText(artwork.getTitle());
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
+        holder.artworkTitle.setText(artwork.getTitle());
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         assert user != null;
         String useremail = user.getEmail();
-
         String artistName = useremail != null ? useremail.split("@")[0] : "Unknown";
         holder.artistName.setText(artistName);
 
 
-        holder.likeIcon.setOnClickListener(v -> {
-            listener.onLikeClick(artwork);
-        });
+        holder.likeIcon.setOnClickListener(v -> listener.onLikeClick(artwork));
 
-        holder.editIcon.setOnClickListener(v -> {
-            listener.onEditClick(artwork);
-        });
 
-        holder.deleteIcon.setOnClickListener(v -> {
-            listener.onDeleteClick(artwork);
+        holder.deleteIcon.setOnClickListener(v -> listener.onDeleteClick(artwork));
 
+
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, EditArtworkPage.class);
+            intent.putExtra("artworkId", artwork.getId());
+            context.startActivity(intent);
         });
     }
 
@@ -81,7 +76,7 @@ public class ArtworkAdapter extends RecyclerView.Adapter<ArtworkAdapter.ArtworkV
     }
 
     public static class ArtworkViewHolder extends RecyclerView.ViewHolder {
-        ImageView artworkImage, likeIcon, editIcon, deleteIcon;
+        ImageView artworkImage, likeIcon, deleteIcon;
         TextView artworkTitle, artistName;
 
         public ArtworkViewHolder(@NonNull View itemView) {
@@ -90,11 +85,9 @@ public class ArtworkAdapter extends RecyclerView.Adapter<ArtworkAdapter.ArtworkV
             artworkTitle = itemView.findViewById(R.id.artworktitle);
             artistName = itemView.findViewById(R.id.artistName);
             likeIcon = itemView.findViewById(R.id.likeIcon);
-            editIcon = itemView.findViewById(R.id.editIcon);
             deleteIcon = itemView.findViewById(R.id.deleteIcon);
         }
     }
-
 
     public interface OnArtworkActionListener {
         void onLikeClick(Artwork artwork);

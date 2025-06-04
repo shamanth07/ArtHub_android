@@ -63,6 +63,13 @@ public class VisitorEventAdapter extends RecyclerView.Adapter<VisitorEventAdapte
         return eventList.size();
     }
 
+    public void updateList(List<Event> newList) {
+        this.eventList = newList;
+        notifyDataSetChanged();
+    }
+
+
+
     public static class EventViewHolder extends RecyclerView.ViewHolder {
         ImageView bannerImageView;
         TextView titleTextView, dateTextView;

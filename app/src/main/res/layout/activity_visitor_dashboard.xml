@@ -8,6 +8,7 @@
     android:orientation="vertical"
     tools:context=".Visitor.VisitorDashboard">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -40,19 +41,43 @@
             android:layout_marginStart="16dp" />
     </LinearLayout>
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="end"
-        android:paddingEnd="16dp">
+        android:paddingEnd="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="4dp">
+
+        <SearchView
+            android:id="@+id/searchArtworks"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:queryHint="Search Artworks"
+            android:visibility="gone"
+            android:layout_marginStart="16dp"/>
+
+        <SearchView
+            android:id="@+id/searchEvents"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:queryHint="Search Events"
+            android:visibility="visible"
+            android:layout_marginStart="16dp"/>
 
         <Spinner
             android:id="@+id/categorySpinner"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
-            android:entries="@array/discovery_categories" />
+            android:entries="@array/discovery_categories"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="8dp"/>
     </LinearLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewvisitortEvents"
@@ -62,11 +87,13 @@
         android:scrollbars="vertical"
         android:visibility="gone" />
 
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewvisitorartworks"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical"
+        android:visibility="visible" />
 
 </LinearLayout>

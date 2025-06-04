@@ -6,7 +6,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +19,8 @@ import com.example.arthub.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.*;
-import com.google.firebase.storage.*;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.HashMap;
 
@@ -24,21 +28,22 @@ public class EditArtworkPage extends AppCompatActivity {
 
     private static final int IMAGE_PICK_CODE = 101;
 
-    ImageView artworkImageView, backbtn;
-    Button saveArtworkButton;
-    EditText titleEditText, descriptionEditText, categoryEditText, yearEditText, priceEditText;
+    private ImageView artworkImageView, backbtn;
+    private Button saveArtworkButton;
+    private EditText titleEditText, descriptionEditText, categoryEditText, yearEditText, priceEditText;
 
-    Uri imageUri;
-    String existingImageUrl, artworkId;
+    private Uri imageUri;
+    private String existingImageUrl, artworkId;
 
-    FirebaseStorage storage;
-    FirebaseDatabase database;
-    FirebaseAuth auth;
+    private FirebaseStorage storage;
+    private FirebaseDatabase database;
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_artwork);
+
 
         artworkImageView = findViewById(R.id.artworkImageView);
         saveArtworkButton = findViewById(R.id.uploadArtworkButton);
@@ -49,52 +54,22 @@ public class EditArtworkPage extends AppCompatActivity {
         priceEditText = findViewById(R.id.priceEditText);
         backbtn = findViewById(R.id.backbtn);
 
+
         storage = FirebaseStorage.getInstance();
         database = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
-
 
         saveArtworkButton.setText("Save");
 
 
         artworkId = getIntent().getStringExtra("artworkId");
 
-        // fetch  existing artwork data from db
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null && artworkId != null) {
-            String artistId = user.getUid();
-
-            DatabaseReference artworkRef = FirebaseDatabase.getInstance()
-                    .getReference("artists")
-                    .child(artistId)
-                    .child("artworks")
-                    .child(artworkId);
-
-            artworkRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot snapshot) {
-                    if (snapshot.exists()) {
-                        titleEditText.setText(snapshot.child("title").getValue(String.class));
-                        descriptionEditText.setText(snapshot.child("description").getValue(String.class));
-                        categoryEditText.setText(snapshot.child("category").getValue(String.class));
-                        yearEditText.setText(snapshot.child("year").getValue(String.class));
-                        priceEditText.setText(snapshot.child("price").getValue(String.class));
-                        existingImageUrl = snapshot.child("imageUrl").getValue(String.class);
-
-                        // Load image using Glide
-                        Glide.with(EditArtworkPage.this)
-                                .load(existingImageUrl)
-                                .into(artworkImageView);
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError error) {
-                    Toast.makeText(EditArtworkPage.this, "Failed to load artwork", Toast.LENGTH_SHORT).show();
-                }
-            });
+        if (artworkId != null && auth.getCurrentUser() != null) {
+            loadArtworkData(artworkId);
+        } else {
+            Toast.makeText(this, "No artwork selected or user not logged in", Toast.LENGTH_SHORT).show();
+            finish();
         }
-
 
         artworkImageView.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -105,8 +80,42 @@ public class EditArtworkPage extends AppCompatActivity {
         saveArtworkButton.setOnClickListener(v -> saveArtwork());
 
         backbtn.setOnClickListener(v -> {
-            Intent intent = new Intent(EditArtworkPage.this, ArtistDashboard.class);
-            startActivity(intent);
+            finish(); // Just finish this activity to go back
+        });
+    }
+
+    private void loadArtworkData(String artworkId) {
+        String artistId = auth.getCurrentUser().getUid();
+        DatabaseReference artworkRef = database.getReference("artists")
+                .child(artistId)
+                .child("artworks")
+                .child(artworkId);
+
+        artworkRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    titleEditText.setText(snapshot.child("title").getValue(String.class));
+                    descriptionEditText.setText(snapshot.child("description").getValue(String.class));
+                    categoryEditText.setText(snapshot.child("category").getValue(String.class));
+                    yearEditText.setText(snapshot.child("year").getValue(String.class));
+                    priceEditText.setText(snapshot.child("price").getValue(String.class));
+                    existingImageUrl = snapshot.child("imageUrl").getValue(String.class);
+
+                    Glide.with(EditArtworkPage.this)
+                            .load(existingImageUrl)
+                            .placeholder(R.drawable.ic_launcher_background)
+                            .into(artworkImageView);
+                } else {
+                    Toast.makeText(EditArtworkPage.this, "Artwork not found", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Toast.makeText(EditArtworkPage.this, "Failed to load artwork: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
@@ -127,16 +136,17 @@ public class EditArtworkPage extends AppCompatActivity {
         String price = priceEditText.getText().toString().trim();
 
         if (title.isEmpty() || desc.isEmpty() || catg.isEmpty() || year.isEmpty()) {
-            Toast.makeText(this, "Fill all fields", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please fill all required fields", Toast.LENGTH_SHORT).show();
             return;
         }
 
         ProgressDialog dialog = new ProgressDialog(this);
         dialog.setMessage("Saving...");
+        dialog.setCancelable(false);
         dialog.show();
 
         if (imageUri != null) {
-
+            // Upload new image
             StorageReference imageRef = storage.getReference().child("artwork_images/" + artworkId + ".jpg");
             imageRef.putFile(imageUri)
                     .addOnSuccessListener(taskSnapshot -> imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
@@ -148,6 +158,7 @@ public class EditArtworkPage extends AppCompatActivity {
                         Toast.makeText(this, "Image upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     });
         } else {
+            // Use existing image URL
             saveArtworkData(title, desc, catg, year, price, existingImageUrl, dialog);
         }
     }
@@ -165,33 +176,29 @@ public class EditArtworkPage extends AppCompatActivity {
         updatedData.put("artistId", artistId);
         updatedData.put("id", artworkId);
 
-        // New reference path
-        DatabaseReference artworkRef = database.getReference();
-                artworkRef.child("artists")
+        // Update artist-specific node
+        database.getReference()
+                .child("artists")
                 .child(artistId)
                 .child("artworks")
                 .child(artworkId)
-                        .setValue(updatedData)
-                 .addOnFailureListener(e -> {
-            Log.e("UpdateArtwork", "Failed to update artist node: " + e.getMessage());
-        });
+                .setValue(updatedData)
+                .addOnFailureListener(e -> Log.e("EditArtworkPage", "Failed to update artist node: " + e.getMessage()));
 
-        DatabaseReference artworkref = database.getReference();
-        artworkref.child("artworks")
+        // Update seperate artworks node
+        database.getReference()
+                .child("artworks")
                 .child(artworkId)
                 .setValue(updatedData)
                 .addOnSuccessListener(unused -> {
                     dialog.dismiss();
-                    Toast.makeText(this, "Artwork updated!", Toast.LENGTH_SHORT).show();
-
-                    startActivity(new Intent(EditArtworkPage.this, ArtistDashboard.class));
+                    Toast.makeText(EditArtworkPage.this, "Artwork updated successfully!", Toast.LENGTH_SHORT).show();
                     finish();
                 })
                 .addOnFailureListener(e -> {
                     dialog.dismiss();
-                    Log.e("UpdateArtwork", "Failed to update global node: " + e.getMessage());
-                    Toast.makeText(this, "Update failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditArtworkPage.this, "Failed to update artwork: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.e("EditArtworkPage", "Failed to update global node: " + e.getMessage());
                 });
     }
-
 }

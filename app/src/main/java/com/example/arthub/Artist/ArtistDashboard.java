@@ -89,10 +89,9 @@ public class ArtistDashboard extends AppCompatActivity {
                         .getReference("artworks")
                         .child(artwork.getId());
 
-                // First remove from global node
+
                 globalArtworkRef.removeValue().addOnCompleteListener(task1 -> {
                     if (task1.isSuccessful()) {
-                        // Then remove from artist node
                         artistArtworkRef.removeValue().addOnCompleteListener(task2 -> {
                             if (task2.isSuccessful()) {
                                 artworkList.remove(artwork);
