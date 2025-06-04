@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Arthub"
+        tools:targetApi="31">
+        <activity
+            android:name=".Visitor.VisitorEventDetail"
+            android:exported="false" />
+        <activity
+            android:name=".Artist.ArtistStatusPage"
+            android:exported="false" />
+        <activity
+            android:name=".Visitor.VisitorArtDiscoveryPage"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.AdminManageInvitations"
+            android:exported="false" />
+        <activity
+            android:name=".Artist.ArtistApplyForEvent"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.AdminProfilePage"
+            android:exported="false" />
+        <activity
+            android:name=".Artist.ArtistProfilePage"
+            android:exported="false" />
+        <activity
+            android:name=".Auth.ChangePassword"
+            android:exported="false" />
+        <activity
+            android:name=".Visitor.VisitorProfilePage"
+            android:exported="false" />
+        <activity
+            android:name=".Visitor.VisitorAccountPage"
+            android:exported="false" />
+        <activity
+            android:name=".Artist.UploadArtwork"
+            android:exported="false" />
+        <activity
+            android:name=".Artist.ArtistAccountPage"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.AdminAccountPage"
+            android:exported="false" />
+        <activity
+            android:name=".Auth.ForgetPassword"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.CreateEvent"
+            android:exported="false" />
+        <activity
+            android:name=".Visitor.ArtworkDetailForVisitor"
+            android:exported="false" />
+        <activity
+            android:name=".Visitor.VisitorDashboard"
+            android:exported="false" />
+        <activity
+            android:name=".Artist.ArtistDashboard"
+            android:exported="false" />
+        <activity
+            android:name=".Artist.EditArtworkPage"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.AdminDashboard"
+            android:exported="false" />
+        <activity
+            android:name=".Auth.SignIn"
+            android:exported="false" />
+        <activity
+            android:name=".Auth.SignUp"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.EditEvent"
+            android:exported="false" />
+        <activity
+            android:name=".Auth.SplashScreen"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCz39FE9RCbShlRfF2wZuw08JqfT-hZVvA" />
+    </application>
+
+</manifest>
