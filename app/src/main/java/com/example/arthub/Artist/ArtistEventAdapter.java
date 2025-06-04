@@ -5,9 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 import com.example.arthub.Admin.Event;
 import com.example.arthub.R;
 import java.text.SimpleDateFormat;
@@ -53,6 +56,12 @@ public class ArtistEventAdapter extends RecyclerView.Adapter<ArtistEventAdapter.
 
         holder.titleTextView.setText(event.getTitle());
         holder.dateTextView.setText(formatDate(event.getEventDate()) + " - " + event.getTime());
+        if (event.bannerImageUrl != null && !event.bannerImageUrl.isEmpty()) {
+            Glide.with(context).load(event.getBannerImageUrl()).into(holder.eventImage);
+        } else {
+            holder.eventImage.setImageResource(R.drawable.ic_launcher_background);
+        }
+
 
         if (appliedEventIds.contains(event.getEventId())) {
             holder.applyButton.setText("Event Applied");
@@ -72,12 +81,16 @@ public class ArtistEventAdapter extends RecyclerView.Adapter<ArtistEventAdapter.
     public static class EventViewHolder extends RecyclerView.ViewHolder {
         TextView titleTextView, dateTextView;
         Button applyButton;
+        ImageView eventImage;
+
 
         public EventViewHolder(@NonNull View itemView) {
             super(itemView);
             titleTextView = itemView.findViewById(R.id.EventTitle);
             dateTextView = itemView.findViewById(R.id.EventDateTime);
             applyButton = itemView.findViewById(R.id.applyButton);
+            eventImage = itemView.findViewById(R.id.eventImage);
+
         }
     }
 

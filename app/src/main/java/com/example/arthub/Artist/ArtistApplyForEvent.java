@@ -5,14 +5,17 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.arthub.Admin.Event;
 import com.example.arthub.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.*;
+
 import java.util.*;
 
 public class ArtistApplyForEvent extends AppCompatActivity {
@@ -47,10 +50,11 @@ public class ArtistApplyForEvent extends AppCompatActivity {
             finish();
         });
 
-        loadEvents();
-        loadAppliedEvents();
+        // Step 1: Load applied event IDs, then load events
+        loadAppliedEvents(() -> loadEvents());
     }
 
+    // Load events the artist has not applied to
     private void loadEvents() {
         eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -59,10 +63,11 @@ public class ArtistApplyForEvent extends AppCompatActivity {
                 if (snapshot.exists()) {
                     for (DataSnapshot snap : snapshot.getChildren()) {
                         Event event = snap.getValue(Event.class);
-                        if (event != null) {
-                            String eventId = snap.getKey();
-                            if (eventId != null) {
-                                event.setEventId(eventId);
+                        String eventId = snap.getKey();
+                        if (event != null && eventId != null) {
+                            event.setEventId(eventId);
+                            // Only include events the artist has NOT applied to
+                            if (!appliedEventIds.contains(eventId)) {
                                 eventList.add(event);
                             }
                         }
@@ -80,7 +85,8 @@ public class ArtistApplyForEvent extends AppCompatActivity {
         });
     }
 
-    private void loadAppliedEvents() {
+    // Load eventIds the artist has already applied to
+    private void loadAppliedEvents(Runnable onComplete) {
         String artistId = mAuth.getCurrentUser().getUid();
         DatabaseReference invitationsRef = FirebaseDatabase.getInstance().getReference("invitations");
 
@@ -93,15 +99,17 @@ public class ArtistApplyForEvent extends AppCompatActivity {
                         appliedEventIds.add(eventSnapshot.getKey());
                     }
                 }
-                adapter.setAppliedEventIds(appliedEventIds);
+                onComplete.run();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.e("Firebase", "Error loading applied events: " + error.getMessage());
+                onComplete.run();
             }
         });
     }
+
 
     private void applyForEvent(Event event) {
         String artistId = mAuth.getCurrentUser().getUid();
@@ -136,8 +144,8 @@ public class ArtistApplyForEvent extends AppCompatActivity {
                     invitationRef.child(artistId).setValue(application).addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             Toast.makeText(ArtistApplyForEvent.this, "Applied successfully", Toast.LENGTH_SHORT).show();
-                            appliedEventIds.add(event.getEventId());
-                            adapter.setAppliedEventIds(appliedEventIds);
+
+                            eventList.remove(event);
                             adapter.notifyDataSetChanged();
                         } else {
                             Toast.makeText(ArtistApplyForEvent.this, "Failed to apply", Toast.LENGTH_SHORT).show();
