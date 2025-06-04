@@ -26,6 +26,7 @@ import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -116,6 +117,7 @@ public class CreateEvent extends AppCompatActivity implements OnMapReadyCallback
                 uploadBannerImageAndSaveEvent();
             }
         });
+        deleteExpiredEvents();
     }
 
     private GoogleMap mMap;
@@ -151,6 +153,27 @@ public class CreateEvent extends AppCompatActivity implements OnMapReadyCallback
                 )
         ).addOnFailureListener(e ->
                 Toast.makeText(this, "Image upload failed: " + e.getMessage(), Toast.LENGTH_LONG).show()
+        );
+    }
+    private void deleteExpiredEvents() {
+        DatabaseReference eventsRef = FirebaseDatabase.getInstance().getReference("events");
+        long today = Calendar.getInstance().getTimeInMillis();
+
+        eventsRef.get().addOnSuccessListener(dataSnapshot -> {
+            for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
+                Long eventDate = eventSnapshot.child("eventDate").getValue(Long.class);
+                if (eventDate != null && eventDate < today) {
+                    eventSnapshot.getRef().removeValue()
+                            .addOnSuccessListener(unused ->
+                                    Toast.makeText(CreateEvent.this, "Deleted expired event: " + eventSnapshot.getKey(), Toast.LENGTH_SHORT).show()
+                            )
+                            .addOnFailureListener(e ->
+                                    Toast.makeText(CreateEvent.this, "Failed to delete event: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                            );
+                }
+            }
+        }).addOnFailureListener(e ->
+                Toast.makeText(this, "Failed to fetch events for cleanup: " + e.getMessage(), Toast.LENGTH_SHORT).show()
         );
     }
 

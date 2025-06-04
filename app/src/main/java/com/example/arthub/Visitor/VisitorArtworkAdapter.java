@@ -70,9 +70,9 @@ public class VisitorArtworkAdapter extends RecyclerView.Adapter<VisitorArtworkAd
 
         String artistId = artwork.getArtistId();
         if (artistNameCache.containsKey(artistId)) {
-            holder.artistName.setText("By: " + artistNameCache.get(artistId));
+            holder.artistName.setText( artistNameCache.get(artistId));
         } else {
-            holder.artistName.setText("By: unknown");
+            holder.artistName.setText("unknown");
             fetchArtistName(artistId, holder);
         }
 

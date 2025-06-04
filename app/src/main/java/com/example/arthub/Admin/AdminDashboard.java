@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class AdminDashboard extends AppCompatActivity {
@@ -74,13 +75,17 @@ public class AdminDashboard extends AppCompatActivity {
     }
 
     private void loadEvents() {
-        eventsRef.addValueEventListener(new ValueEventListener() {
+        long today = Calendar.getInstance().getTimeInMillis();
+
+        eventsRef.orderByChild("eventDate").startAt(today).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 eventList.clear();
                 for (DataSnapshot eventSnapshot : snapshot.getChildren()) {
                     Event event = eventSnapshot.getValue(Event.class);
-                    eventList.add(event);
+                    if (event != null) {
+                        eventList.add(event);
+                    }
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -91,6 +96,10 @@ public class AdminDashboard extends AppCompatActivity {
             }
         });
     }
+
+
+
+
 
     public void deleteEvent(String eventId) {
         eventsRef.child(eventId).removeValue()
