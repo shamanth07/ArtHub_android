@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/artworkImage"
+            android:src="@drawable/ic_launcher_background"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/artworkTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=" Artist Title"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:paddingTop="8dp" />
+
+        <TextView
+            android:id="@+id/artistName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Artist Name"
+            android:textSize="16sp"
+            android:paddingTop="4dp" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp">
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/artworkDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Artwork description goes here..."
+            android:paddingTop="8dp" />
+
+        <TextView
+            android:text="Instagram:"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:paddingTop="10dp" />
+
+        <TextView
+            android:id="@+id/instagramLink"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="N/A" />
+
+        <TextView
+            android:text="Website:"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:paddingTop="10dp" />
+
+        <TextView
+            android:id="@+id/websiteLink"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="N/A" />
+    </LinearLayout>
+</ScrollView>

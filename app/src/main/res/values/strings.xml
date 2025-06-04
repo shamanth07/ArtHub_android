@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Arthub</string>
+    <string-array name="discovery_categories">
+        <item>Artworks</item>
+        <item>Events</item>
+    </string-array>
+
+</resources>
