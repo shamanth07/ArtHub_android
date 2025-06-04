@@ -55,7 +55,7 @@
                 android:id="@+id/likeIcon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/likes"
+                android:src="@drawable/like"
                 android:layout_marginBottom="8dp" />
 
             <ImageView

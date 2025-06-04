@@ -57,7 +57,7 @@
                 android:id="@+id/likeIcon"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/likes"
+                android:src="@drawable/like"
                 android:layout_marginEnd="4dp"
                 card_view:tint="@color/red" />
 
@@ -74,9 +74,10 @@
                 android:id="@+id/commentIcon"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/comments"
-
-                android:layout_marginEnd="4dp" />
+                android:src="@drawable/comment"
+                android:layout_marginEnd="4dp"
+                card_view:tint="@color/red"
+             />
 
             <TextView
                 android:id="@+id/commentCount"

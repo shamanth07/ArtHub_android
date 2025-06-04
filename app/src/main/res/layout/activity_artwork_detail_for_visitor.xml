@@ -11,6 +11,7 @@
 
         <ImageView
             android:id="@+id/artworkImage"
+            android:src="@drawable/ic_launcher_background"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:scaleType="centerCrop" />
@@ -38,42 +39,6 @@
             android:layout_height="wrap_content"
             android:paddingTop="8dp">
 
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="280dp">
-                <ImageView
-                    android:id="@+id/likeIcon"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/likes"
-                   />
-                <TextView
-                    android:id="@+id/likeCount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0"
-                    android:layout_marginStart="4dp"
-                />
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <ImageView
-                    android:id="@+id/commentIcon"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/comments" />
-                <TextView
-                    android:id="@+id/commentCount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0"
-                    android:layout_marginStart="4dp" />
-            </LinearLayout>
         </LinearLayout>
 
         <TextView
