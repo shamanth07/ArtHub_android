@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Visitor.VisitorDashboard">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        android:gravity="center_vertical"
+        android:layout_marginTop="30dp">
+
+        <ImageView
+            android:id="@+id/menuIcon"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/menu"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="ARTHUB"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:gravity="center" />
+
+        <ImageView
+            android:id="@+id/notificationforvisitor"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/notification"
+            android:layout_marginStart="16dp" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:paddingEnd="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="4dp">
+
+        <SearchView
+            android:id="@+id/searchArtworks"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:queryHint="Search Artworks"
+            android:visibility="gone"
+            android:layout_marginStart="16dp"/>
+
+        <SearchView
+            android:id="@+id/searchEvents"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:queryHint="Search Events"
+            android:visibility="visible"
+            android:layout_marginStart="16dp"/>
+
+        <Spinner
+            android:id="@+id/categorySpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:entries="@array/discovery_categories"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="8dp"/>
+    </LinearLayout>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewvisitortEvents"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="vertical"
+        android:visibility="gone" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewvisitorartworks"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="vertical"
+        android:visibility="visible" />
+
+</LinearLayout>
