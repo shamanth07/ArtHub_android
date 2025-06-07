@@ -11,19 +11,19 @@ public class Event implements Serializable {
     public int maxArtists;
     public String bannerImageUrl;
 
-    private String locationName;
+    private String location;
 
 
 
     public double latitude;
     public double longitude;
 
-    public double price;
+    public double ticketPrice;
 
 
     public Event() {}
 
-    public Event(String eventId, String title, String description, long date, String time, int maxArtists, String bannerImageUrl,String locationName, double latitude, double longitude,double price) {
+    public Event(String eventId, String title, String description, long date, String time, int maxArtists, String bannerImageUrl,String location, double latitude, double longitude,double ticketPrice) {
         this.eventId = eventId;
         this.title = title;
         this.description = description;
@@ -31,11 +31,11 @@ public class Event implements Serializable {
         this.time = time;
         this.maxArtists = maxArtists;
         this.bannerImageUrl = bannerImageUrl;
-        this.locationName = locationName;
+        this.location = location;
 
         this.latitude = latitude;
         this.longitude = longitude;
-        this.price = price;
+        this.ticketPrice = ticketPrice;
 
     }
 
@@ -95,12 +95,12 @@ public class Event implements Serializable {
         this.bannerImageUrl = bannerImageUrl;
     }
 
-    public String getLocationName() {
-        return locationName;
+    public String getLocation() {
+        return location;
     }
 
-    public void setLocationName(String locationName) {
-        this.locationName = locationName;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public double getLatitude() {
@@ -119,11 +119,11 @@ public class Event implements Serializable {
         this.longitude = longitude;
     }
 
-    public double getPrice() {
-        return price;
+    public double getticketPrice() {
+        return ticketPrice;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setticketPrice(double ticketPrice) {
+        this.ticketPrice = ticketPrice;
     }
 }

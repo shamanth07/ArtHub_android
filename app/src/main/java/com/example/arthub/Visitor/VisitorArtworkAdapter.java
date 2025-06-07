@@ -14,7 +14,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.arthub.Visitor.Comment;
 
 
 import com.bumptech.glide.Glide;
@@ -87,7 +86,7 @@ public class VisitorArtworkAdapter extends RecyclerView.Adapter<VisitorArtworkAd
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 boolean liked = snapshot.exists() && Boolean.TRUE.equals(snapshot.getValue(Boolean.class));
-                holder.likeIcon.setImageResource(liked ? R.drawable.like : R.drawable.unliked);
+                holder.likeIcon.setImageResource(liked ? R.drawable.liked : R.drawable.unliked);
             }
 
             @Override
@@ -115,12 +114,13 @@ public class VisitorArtworkAdapter extends RecyclerView.Adapter<VisitorArtworkAd
 
         DatabaseReference artworkRef = FirebaseDatabase.getInstance().getReference("artworks").child(artworkId);
 
+
         likeRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 boolean liked = snapshot.exists() && Boolean.TRUE.equals(snapshot.getValue(Boolean.class));
-                if (liked) {
 
+                if (liked) {
                     likeRef.removeValue();
                     artworkRef.child("likes").runTransaction(new Transaction.Handler() {
                         @NonNull
@@ -139,8 +139,8 @@ public class VisitorArtworkAdapter extends RecyclerView.Adapter<VisitorArtworkAd
                             holder.likeCount.setText(String.valueOf(newLikes != null ? newLikes : 0));
                         }
                     });
-                } else {
 
+                } else {
                     likeRef.setValue(true);
                     artworkRef.child("likes").runTransaction(new Transaction.Handler() {
                         @NonNull
@@ -154,7 +154,7 @@ public class VisitorArtworkAdapter extends RecyclerView.Adapter<VisitorArtworkAd
 
                         @Override
                         public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot snapshot) {
-                            holder.likeIcon.setImageResource(R.drawable.like);
+                            holder.likeIcon.setImageResource(R.drawable.liked);
                             Integer newLikes = snapshot != null ? snapshot.getValue(Integer.class) : 0;
                             holder.likeCount.setText(String.valueOf(newLikes != null ? newLikes : 0));
                         }
@@ -166,7 +166,6 @@ public class VisitorArtworkAdapter extends RecyclerView.Adapter<VisitorArtworkAd
             public void onCancelled(@NonNull DatabaseError error) {}
         });
     }
-
 
     private void showCommentBottomSheet(String artworkId, ViewHolder holder) {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);

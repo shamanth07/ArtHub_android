@@ -186,7 +186,7 @@ public class CreateEvent extends AppCompatActivity implements OnMapReadyCallback
         String description = descriptionInput.getText().toString().trim();
         String time = timeInput.getText().toString().trim();
         int maxArtists = Integer.parseInt(maxArtistsInput.getText().toString().trim());
-        String locationName = selectedEventLocation;
+        String location = selectedEventLocation;
 
 
 
@@ -203,15 +203,15 @@ public class CreateEvent extends AppCompatActivity implements OnMapReadyCallback
         double longitude = selectedLatLng.longitude;
         String priceString = priceid.getText().toString().trim();
 
-        double price;
+        double ticketPrice;
         try {
-            price = Double.parseDouble(priceString);
+            ticketPrice = Double.parseDouble(priceString);
         } catch (NumberFormatException e) {
             Toast.makeText(this, "Please enter a valid price", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (price < 0) {
+        if (ticketPrice < 0) {
             Toast.makeText(this, "Price cannot be negative", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -222,7 +222,7 @@ public class CreateEvent extends AppCompatActivity implements OnMapReadyCallback
         }
 
 
-        Event event = new Event(eventId, title, description, eventDate, time, maxArtists, bannerImageUrl,locationName,latitude, longitude,price);
+        Event event = new Event(eventId, title, description, eventDate, time, maxArtists, bannerImageUrl,location,latitude, longitude,ticketPrice);
 
         eventsRef.child(eventId).setValue(event)
                 .addOnSuccessListener(unused -> {

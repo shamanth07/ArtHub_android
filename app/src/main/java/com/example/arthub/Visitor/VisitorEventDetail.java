@@ -16,12 +16,12 @@ import java.util.Date;
 import java.util.Locale;
 
 public class VisitorEventDetail extends AppCompatActivity {
-    private TextView title, location, date, description, subtotal, tax, total, ticketCount,showprice;
+    private TextView title, location, date, description, subtotal, tax, total, ticketCount;
     private ImageView bannerImage, btnMinus, btnPlus;
     private Button bookbtn;
 
     private int ticketQuantity = 1;
-    private double price = 0.0;
+    private double price = 0.0; // Now fetched directly as double
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,45 +41,42 @@ public class VisitorEventDetail extends AppCompatActivity {
         btnMinus = findViewById(R.id.btnMinus);
         btnPlus = findViewById(R.id.btnPlus);
         bookbtn = findViewById(R.id.bookbtn);
-        showprice = findViewById(R.id.showprice);
 
-
+        // Get Event object passed from intent
         Event event = (Event) getIntent().getSerializableExtra("event");
 
         if (event != null) {
             title.setText(event.getTitle());
-            location.setText("Location: " + (event.getLocationName() != null ? event.getLocationName() : "Not available"));
+            location.setText("Location: " + (event.getLocation() != null ? event.getLocation() : "Not available"));
             date.setText("Date: " + new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm", Locale.getDefault()).format(new Date(event.getEventDate())));
             description.setText(event.getDescription());
             Glide.with(this).load(event.getBannerImageUrl()).into(bannerImage);
 
-
-            price = event.getPrice();
-            showprice.setText("price for one ticket:" + price);
-            updatePrice();
+            price = event.getticketPrice(); // Directly use double
+            updatePrice(price);
         }
 
         btnPlus.setOnClickListener(v -> {
             ticketQuantity++;
-            updatePrice();
+            updatePrice(price);
         });
 
         btnMinus.setOnClickListener(v -> {
             if (ticketQuantity > 1) {
                 ticketQuantity--;
-                updatePrice();
+                updatePrice(price);
             }
         });
     }
 
-    private void updatePrice() {
+    private void updatePrice(double price) {
         ticketCount.setText(String.valueOf(ticketQuantity));
         double subtotalVal = ticketQuantity * price;
         double taxVal = subtotalVal * 0.18;
         double totalVal = subtotalVal + taxVal;
 
-        subtotal.setText("SubTotal" +"$" + String.format(Locale.getDefault(), "%.2f", subtotalVal));
-        tax.setText("Tax(18%):"+ "$" + String.format(Locale.getDefault(), "%.2f", taxVal));
-        total.setText("Total:"+"$" + String.format(Locale.getDefault(), "%.2f", totalVal));
+        subtotal.setText("SubTotal: $" + String.format(Locale.getDefault(), "%.2f", subtotalVal));
+        tax.setText("Tax (18%): $" + String.format(Locale.getDefault(), "%.2f", taxVal));
+        total.setText("Total: $" + String.format(Locale.getDefault(), "%.2f", totalVal));
     }
 }
