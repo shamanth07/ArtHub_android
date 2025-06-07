@@ -154,11 +154,11 @@ public class EditEvent extends AppCompatActivity implements OnMapReadyCallback {
 
         Glide.with(this).load(event.getBannerImageUrl()).into(bannerImage);
 
-        selectedEventLocation = event.getLocationName();
+        selectedEventLocation = event.getLocation();
 
         latitude = event.getLatitude();
         longitude = event.getLongitude();
-        priceid.setText(String.valueOf(event.getPrice()));
+        priceid.setText(String.valueOf(event.getticketPrice()));
     }
 
     private void openImagePicker() {
@@ -201,7 +201,7 @@ public class EditEvent extends AppCompatActivity implements OnMapReadyCallback {
         String description = descriptionInput.getText().toString().trim();
         String time = timeInput.getText().toString().trim();
         int maxArtists = Integer.parseInt(maxArtistsInput.getText().toString().trim());
-        double  price = Double.parseDouble(priceid.getText().toString().trim());
+       double  price = Double.parseDouble(priceid.getText().toString().trim());
 
 
         Calendar cal = Calendar.getInstance();
@@ -222,8 +222,8 @@ public class EditEvent extends AppCompatActivity implements OnMapReadyCallback {
         }
     }
 
-    private void saveUpdatedEvent(String eventId, String title, String description, long date, String time, int maxArtists, String bannerUrl, String selectedEventLocation,double latitude, double longitude,double price) {
-        Event updatedEvent = new Event(eventId, title, description, date, time, maxArtists, bannerUrl,selectedEventLocation,latitude, longitude,price);
+    private void saveUpdatedEvent(String eventId, String title, String description, long date, String time, int maxArtists, String bannerUrl, String selectedEventLocation,double latitude, double longitude,double ticketPrice) {
+        Event updatedEvent = new Event(eventId, title, description, date, time, maxArtists, bannerUrl,selectedEventLocation,latitude, longitude,ticketPrice);
 
         eventsRef.child(eventId).setValue(updatedEvent)
                 .addOnSuccessListener(unused -> {
