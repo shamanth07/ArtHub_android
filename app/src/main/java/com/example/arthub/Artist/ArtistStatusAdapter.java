@@ -46,7 +46,7 @@ public class ArtistStatusAdapter extends RecyclerView.Adapter<ArtistStatusAdapte
 
         holder.title.setText(event.getTitle());
         holder.description.setText(event.getDescription());
-        holder.location.setText(event.getLocationName());
+        holder.location.setText(event.getLocation());
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
         String dateStr = dateFormat.format(new Date(event.getEventDate()));
