@@ -81,6 +81,35 @@
             android:layout_height="1dp"
             android:background="#CCCCCC" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingVertical="12dp"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/liked"
+                />
+
+            <TextView
+                android:id="@+id/favartworks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Favourites"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_marginStart="12dp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#CCCCCC" />
+
 
 
 
@@ -99,6 +128,7 @@
                 />
 
             <TextView
+                android:id="@+id/visitorbookinghistory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Booking History"
@@ -128,9 +158,11 @@
                 />
 
             <TextView
+                android:id="@+id/settings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Settings"
+                android:textStyle="bold"
                 android:textSize="16sp"
                 android:layout_marginStart="12dp" />
         </LinearLayout>
