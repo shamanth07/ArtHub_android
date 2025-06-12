@@ -111,14 +111,14 @@ public class UploadArtwork extends AppCompatActivity {
                             0
                     );
 
-                    // Save full artwork data under artist's node
+
                     DatabaseReference artistArtworksRef = database.getReference();
                     artistArtworksRef.child("artists")
                             .child(artistId)
                             .child("artworks")
                             .child(artworkId)
                             .setValue(artwork);
-                       //saving artwork under "artworks"
+
 
 
                     DatabaseReference artistartworksref = database.getReference();
