@@ -25,7 +25,7 @@ public class AdminAccountPage extends AppCompatActivity {
 
     ImageView backbtn;
 
-    TextView adminName,adminprofilebtn,manageinvitations;
+    TextView adminName,adminprofilebtn,manageinvitations,createevent,settings,reports;
 
 
 
@@ -42,7 +42,9 @@ public class AdminAccountPage extends AppCompatActivity {
         adminName = findViewById(R.id.adminName);
         adminprofilebtn = findViewById(R.id.adminprofilebtn);
         manageinvitations = findViewById(R.id.manageinvitations);
-
+        createevent = findViewById(R.id.createevent);
+        settings = findViewById(R.id.settings);
+        reports = findViewById(R.id.reports);
 
 
 
@@ -64,6 +66,11 @@ public class AdminAccountPage extends AppCompatActivity {
         });
         adminprofilebtn.setOnClickListener(v -> {
             Intent intent = new Intent(AdminAccountPage.this, AdminProfilePage.class);
+            startActivity(intent);
+
+        });
+        createevent.setOnClickListener(v -> {
+            Intent intent = new Intent(AdminAccountPage.this, CreateEvent.class);
             startActivity(intent);
 
         });
