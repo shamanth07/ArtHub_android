@@ -23,8 +23,8 @@ import java.util.Map;
 
 public class ArtistProfilePage extends AppCompatActivity {
 
-    TextView changepassword, ArtistUsername;
-    EditText emailid, bioid, websiteLink, instagramLink;
+    TextView changepassword;
+    EditText ArtistUsername,emailid, bioid, websiteLink, instagramLink;
     ImageView backbtn, artistprofilepicture;
     Button editprofile, saveprofile;
 
@@ -65,7 +65,7 @@ public class ArtistProfilePage extends AppCompatActivity {
         String email = user.getEmail();
         String username = (email != null) ? email.split("@")[0] : "Artist";
 
-        ArtistUsername.setText(username + " (Artist)");
+        ArtistUsername.setText(username);
         emailid.setText(email);
 
         artistRef = FirebaseDatabase.getInstance().getReference("artists").child(uid);
@@ -93,23 +93,26 @@ public class ArtistProfilePage extends AppCompatActivity {
 
     private void enableEditing(boolean enable) {
         isEditing = enable;
+
+        ArtistUsername.setEnabled(enable);
+        ArtistUsername.setFocusable(enable);
+        ArtistUsername.setFocusableInTouchMode(enable);
+
         bioid.setEnabled(enable);
-
-
-
         bioid.setFocusable(enable);
         bioid.setFocusableInTouchMode(enable);
 
-        websiteLink.setFocusable(enable);
         websiteLink.setEnabled(enable);
+        websiteLink.setFocusable(enable);
         websiteLink.setFocusableInTouchMode(enable);
 
-        instagramLink.setFocusable(enable);
         instagramLink.setEnabled(enable);
+        instagramLink.setFocusable(enable);
         instagramLink.setFocusableInTouchMode(enable);
 
         artistprofilepicture.setEnabled(enable);
     }
+
 
     private void openImagePicker() {
         Intent intent = new Intent();
@@ -148,12 +151,12 @@ public class ArtistProfilePage extends AppCompatActivity {
         String bio = bioid.getText().toString().trim();
         String website = websiteLink.getText().toString().trim();
         String instagram = instagramLink.getText().toString().trim();
-        String name = emailid.getText().toString().split("@")[0];
+        String name = ArtistUsername.getText().toString().trim();
         String email = emailid.getText().toString();
 
         Map<String, Object> updates = new HashMap<>();
         updates.put("name", name);
-        updates.put("email", "email : " + email);
+        updates.put("email",email);
         updates.put("bio", bio);
         updates.put("socialLinks/website", website);
         updates.put("socialLinks/instagram", instagram);
