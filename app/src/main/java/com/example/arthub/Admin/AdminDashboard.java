@@ -14,6 +14,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.arthub.R;
 import com.google.firebase.database.DataSnapshot;
@@ -43,15 +44,21 @@ public class AdminDashboard extends AppCompatActivity {
     private List<Event> eventList = new ArrayList<>();
     private DatabaseReference eventsRef;
 
+    private SwipeRefreshLayout swipeRefresh;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_dashboard);
 
         menuIcon = findViewById(R.id.menuIcon);
-        btnCreateEvent = findViewById(R.id.btnCreateEvent);
+       btnCreateEvent = findViewById(R.id.btnCreateEvent);
         recyclerViewEvents = findViewById(R.id.recyclerViewEvents);
+        swipeRefresh = findViewById(R.id.swipeRefresh);
+
         recyclerViewEvents.setLayoutManager(new LinearLayoutManager(this));
+
+
 
         adapter = new EventAdapter(this, eventList);
         recyclerViewEvents.setAdapter(adapter);
@@ -59,6 +66,7 @@ public class AdminDashboard extends AppCompatActivity {
         eventsRef = FirebaseDatabase.getInstance().getReference("events");
 
         loadEvents();
+        SwipeRefreshHelper.setupSwipeRefresh(swipeRefresh, this, this::loadEvents);
 
         menuIcon.setOnClickListener(v -> {
             Intent intent = new Intent(AdminDashboard.this,AdminAccountPage.class);
@@ -70,14 +78,16 @@ public class AdminDashboard extends AppCompatActivity {
         btnCreateEvent.setOnClickListener(v -> {
             Intent intent = new Intent(AdminDashboard.this, CreateEvent.class);
             startActivity(intent);
-
+      
         });
+
+
     }
 
     private void loadEvents() {
         long today = Calendar.getInstance().getTimeInMillis();
 
-        eventsRef.orderByChild("eventDate").startAt(today).addValueEventListener(new ValueEventListener() {
+        eventsRef.orderByChild("eventDate").startAt(today).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 eventList.clear();
@@ -88,6 +98,8 @@ public class AdminDashboard extends AppCompatActivity {
                     }
                 }
                 adapter.notifyDataSetChanged();
+                swipeRefresh.setRefreshing(false);
+
             }
 
             @Override

@@ -10,8 +10,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.arthub.Admin.Event;
+import com.example.arthub.Admin.SwipeRefreshHelper;
 import com.example.arthub.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.*;
@@ -28,6 +30,8 @@ public class ArtistApplyForEvent extends AppCompatActivity {
     private DatabaseReference eventRef;
     private FirebaseAuth mAuth;
 
+    SwipeRefreshLayout swipeRefresh;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +39,7 @@ public class ArtistApplyForEvent extends AppCompatActivity {
 
         backbtn = findViewById(R.id.backbtn);
         recyclerView = findViewById(R.id.recyclerViewEvents);
+        swipeRefresh = findViewById(R.id.swipeRefresh);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         eventList = new ArrayList<>();
@@ -50,8 +55,11 @@ public class ArtistApplyForEvent extends AppCompatActivity {
             finish();
         });
 
-
+        SwipeRefreshHelper.setupSwipeRefresh(swipeRefresh, this, this::loadEvents);
         loadAppliedEvents(() -> loadEvents());
+
+
+
     }
 
     private void loadEvents() {
@@ -74,6 +82,7 @@ public class ArtistApplyForEvent extends AppCompatActivity {
                     Toast.makeText(ArtistApplyForEvent.this, "No events found", Toast.LENGTH_SHORT).show();
                 }
                 adapter.notifyDataSetChanged();
+                swipeRefresh.setRefreshing(false);
             }
 
             @Override
