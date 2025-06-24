@@ -35,16 +35,20 @@ android {
 dependencies {
 
 
-    implementation("com.google.firebase:firebase-auth:22.0.0")
+    implementation ("com.google.firebase:firebase-auth:22.3.1")
+
     implementation("com.google.firebase:firebase-database:20.3.0")
     implementation ("com.google.android.material:material:1.4.0")
     implementation ("com.github.bumptech.glide:glide:4.16.0")
+    implementation ("com.stripe:stripe-android:20.43.0")
     implementation(libs.firebase.inappmessaging)
     implementation (libs.appcompat.v161)
 
     annotationProcessor ("com.github.bumptech.glide:compiler:4.16.0")
     implementation ("com.google.android.gms:play-services-maps:18.1.0")// for map api
     implementation ("com.google.android.libraries.places:places:3.2.0")// for place api
+    implementation ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+
 
 
 
