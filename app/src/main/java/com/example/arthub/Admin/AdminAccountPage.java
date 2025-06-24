@@ -15,8 +15,10 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.arthub.Auth.SignIn;
 import com.example.arthub.R;
+import com.example.arthub.Visitor.Settings;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
 
 public class AdminAccountPage extends AppCompatActivity {
 
@@ -26,6 +28,8 @@ public class AdminAccountPage extends AppCompatActivity {
     ImageView backbtn;
 
     TextView adminName,adminprofilebtn,manageinvitations,createevent,settings,reports;
+
+    String role = "admin";
 
 
 
@@ -64,6 +68,11 @@ public class AdminAccountPage extends AppCompatActivity {
             finish();
 
         });
+        reports.setOnClickListener(v -> {
+            Intent intent = new Intent(AdminAccountPage.this, AdminReportsActivity.class);
+            startActivity(intent);
+
+        });
         adminprofilebtn.setOnClickListener(v -> {
             Intent intent = new Intent(AdminAccountPage.this, AdminProfilePage.class);
             startActivity(intent);
@@ -77,6 +86,19 @@ public class AdminAccountPage extends AppCompatActivity {
         manageinvitations.setOnClickListener(v -> {
             Intent intent = new Intent(AdminAccountPage.this,AdminManageInvitations.class);
             startActivity(intent);
+
+        });
+        settings.setOnClickListener(v -> {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user != null) {
+                String currentUserId = user.getUid();
+               Intent intent = new Intent(AdminAccountPage.this, Settings.class);
+                intent.putExtra("userId", currentUserId);
+                intent.putExtra("role", role);
+                startActivity(intent);
+            } else {
+
+            }
 
         });
 

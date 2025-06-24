@@ -144,17 +144,27 @@ public class CreateEvent extends AppCompatActivity implements OnMapReadyCallback
 
     private void uploadBannerImageAndSaveEvent() {
         String eventId = eventsRef.push().getKey();
-        if (eventId == null) return;
+        if (eventId == null || selectedImageUri == null) {
+            Toast.makeText(this, "Missing event ID or image", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        StorageReference imageRef = storageRef.child("banner_" + eventId + ".jpg");
-        imageRef.putFile(selectedImageUri).addOnSuccessListener(taskSnapshot ->
-                imageRef.getDownloadUrl().addOnSuccessListener(uri ->
-                        saveEventToDatabase(eventId, uri.toString())
-                )
-        ).addOnFailureListener(e ->
-                Toast.makeText(this, "Image upload failed: " + e.getMessage(), Toast.LENGTH_LONG).show()
-        );
+
+        StorageReference imageRef = FirebaseStorage.getInstance()
+                .getReference()
+                .child("event_banners/banner_" + eventId + ".jpg");
+
+        imageRef.putFile(selectedImageUri)
+                .addOnSuccessListener(taskSnapshot ->
+                        imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                            String downloadUrl = uri.toString();
+                            saveEventToDatabase(eventId, downloadUrl);
+                        })
+                ).addOnFailureListener(e ->
+                        Toast.makeText(this, "Image upload failed: " + e.getMessage(), Toast.LENGTH_LONG).show()
+                );
     }
+
 
 
     private void saveEventToDatabase(String eventId, String bannerImageUrl) {
