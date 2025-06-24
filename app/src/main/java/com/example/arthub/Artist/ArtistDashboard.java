@@ -62,9 +62,11 @@ public class ArtistDashboard extends AppCompatActivity {
 
         artworkList = new ArrayList<>();
         adapter = new ArtworkAdapter(this, artworkList, new ArtworkAdapter.OnArtworkActionListener() {
+
+
             @Override
             public void onLikeClick(Artwork artwork) {
-                Toast.makeText(ArtistDashboard.this, "Liked: " + artwork.getTitle(), Toast.LENGTH_SHORT).show();
+
             }
 
             @Override
@@ -160,4 +162,3 @@ public class ArtistDashboard extends AppCompatActivity {
     }
 
 }
-

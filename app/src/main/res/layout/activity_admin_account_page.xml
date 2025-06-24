@@ -11,13 +11,13 @@
 
 
 
-<ImageView
-    android:id="@+id/backbtn"
-    android:layout_width="35dp"
-    android:layout_height="25dp"
-    android:src="@drawable/back"
-    android:layout_marginRight="160dp"
-    />
+    <ImageView
+        android:id="@+id/backbtn"
+        android:layout_width="35dp"
+        android:layout_height="25dp"
+        android:src="@drawable/back"
+        android:layout_marginRight="160dp"
+        />
 
 
 
@@ -92,9 +92,10 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/createevent"
-                 />
+                />
 
             <TextView
+                android:id="@+id/createevent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Create Event"
@@ -152,6 +153,7 @@
                 />
 
             <TextView
+                android:id="@+id/reports"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Reports"
@@ -178,9 +180,10 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/settings"
-                 />
+                />
 
             <TextView
+                android:id="@+id/settings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Settings"

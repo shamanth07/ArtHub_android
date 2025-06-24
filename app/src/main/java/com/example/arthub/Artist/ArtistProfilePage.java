@@ -93,13 +93,19 @@ public class ArtistProfilePage extends AppCompatActivity {
 
     private void enableEditing(boolean enable) {
         isEditing = enable;
+        bioid.setEnabled(enable);
+
+
+
         bioid.setFocusable(enable);
         bioid.setFocusableInTouchMode(enable);
 
         websiteLink.setFocusable(enable);
+        websiteLink.setEnabled(enable);
         websiteLink.setFocusableInTouchMode(enable);
 
         instagramLink.setFocusable(enable);
+        instagramLink.setEnabled(enable);
         instagramLink.setFocusableInTouchMode(enable);
 
         artistprofilepicture.setEnabled(enable);
