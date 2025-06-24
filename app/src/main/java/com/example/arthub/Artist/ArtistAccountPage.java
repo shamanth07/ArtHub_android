@@ -16,13 +16,14 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.arthub.Auth.SignIn;
 import com.example.arthub.R;
+import com.example.arthub.Visitor.Settings;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 public class ArtistAccountPage extends AppCompatActivity implements View.OnClickListener {
 
     Button btnLogout;
     ImageView backbtn;
-    TextView artistName, artistprofile, applyforevent, artiststatus,favartworks;
+    TextView artistName, artistprofile, applyforevent, artiststatus,favartworks,settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,7 @@ public class ArtistAccountPage extends AppCompatActivity implements View.OnClick
         applyforevent = findViewById(R.id.applyforevent);
         artiststatus = findViewById(R.id.artiststatus);
         favartworks = findViewById(R.id.favartworks);
+        settings = findViewById(R.id.settings);
 
 
         btnLogout.setOnClickListener(this);
@@ -77,6 +79,9 @@ public class ArtistAccountPage extends AppCompatActivity implements View.OnClick
             startActivity(intent);
         } else if (id == R.id.artistprofile) {
             Intent intent = new Intent(this, ArtistProfilePage.class);
+            startActivity(intent);
+        } else if (id == R.id.settings) {
+            Intent intent = new Intent(this, Settings.class);
             startActivity(intent);
         }
     }

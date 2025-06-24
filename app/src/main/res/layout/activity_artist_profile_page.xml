@@ -1,167 +1,226 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:padding="16dp"
     tools:context=".Artist.ArtistProfilePage">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        android:gravity="center_vertical">
+        android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/backbtn"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/back"
-            android:layout_gravity="start"/>
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/backbtn"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/back" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Artist Profile"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/black" />
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/artistprofilepicture"
-            android:layout_width="95dp"
-            android:layout_height="95dp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="24dp"
             android:src="@drawable/profileimage"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp" />
+            android:scaleType="centerCrop" />
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center_vertical">
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="16dp"
+            android:paddingHorizontal="8dp">
 
             <TextView
                 android:id="@+id/ArtistUsername"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="Username (Artist)"
+                android:text="Naveen(Artist)"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/black" />
 
             <Button
                 android:id="@+id/editprofile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Edit Profile"
-                android:backgroundTint="@color/black"
-                android:textColor="@color/white"
-                android:layout_marginTop="8dp"/>
+                android:backgroundTint="@color/white"
+                android:textColor="@color/black"
+                android:elevation="2dp"
+                android:paddingHorizontal="16dp" />
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#CCCCCC"
+            android:layout_marginTop="16dp" />
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="40dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        >
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Email"
-            android:textSize="25dp"
+            android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:layout_marginBottom="10dp"
-            />
+            android:layout_marginTop="16dp" />
+
         <EditText
             android:id="@+id/emailid"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textColorHint="@color/black"
+            android:layout_height="wrap_content"
             android:enabled="false"
             android:focusable="false"
-            android:inputType="textEmailAddress"
+            android:focusableInTouchMode="false"
+            android:textColorHint="@color/black"
+            android:textColor="#777"
             android:hint="example@gmail.com"
-            android:layout_marginBottom="20dp"
-            android:text=""/>
+            android:text="mamta@gmail.com" />
 
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#CCCCCC"
+            android:layout_marginTop="16dp" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Bio"
-            android:textColor="@color/black"
+            android:textSize="16sp"
             android:textStyle="bold"
-            android:textSize="25dp"
+            android:textColor="@color/black"
+            android:layout_marginTop="16dp" />
 
-            />
         <EditText
             android:id="@+id/bioid"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textColorHint="@color/black"
-            android:hint="Follow the goals ..."
-            android:enabled="true"
+            android:layout_height="wrap_content"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:text=""
-            android:layout_marginBottom="20dp"/>
+            android:text="artist"
+            android:hint="Bio"
+            android:textColor="#555" />
 
-
-
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#CCCCCC"
+            android:layout_marginTop="16dp" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Social Links"
-            android:textColor="@color/black"
+            android:textSize="16sp"
             android:textStyle="bold"
-            android:textSize="25dp"
+            android:textColor="@color/black"
+            android:layout_marginTop="16dp" />
 
-            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="8dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/website" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Website"
+                android:textSize="14sp"
+                android:textColor="@color/black" />
+        </LinearLayout>
+
         <EditText
-
             android:id="@+id/websiteLink"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textColorHint="@color/black"
-            android:hint="website:www.janedoeart.com"
-            android:enabled="true"
+            android:layout_height="wrap_content"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:text=""/>
+            android:text="https://www.google.com"
+            android:textColor="#555" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="8dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/insta" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Instagram"
+                android:textSize="14sp"
+                android:textColor="@color/black" />
+        </LinearLayout>
+
         <EditText
             android:id="@+id/instagramLink"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textColorHint="@color/black"
-            android:hint="website:@janedoeart"
-            android:enabled="true"
+            android:layout_height="wrap_content"
+
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:text=""
-            android:layout_marginBottom="10dp"/>
+            android:text="http://www.instagram.com"
+            android:textColor="#555" />
 
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#CCCCCC"
+            android:layout_marginTop="16dp" />
 
         <TextView
             android:id="@+id/changepassword"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="wrap_content"
             android:text="Change Password"
-            android:textColor="@color/black"
-            android:textSize="20dp"
             android:textStyle="bold"
-            android:layout_marginTop="20dp"
-            />
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:layout_marginTop="20dp" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="#CCCCCC" />
+            android:background="#CCCCCC"
+            android:layout_marginBottom="16dp" />
 
         <Button
             android:id="@+id/saveprofile"
@@ -171,15 +230,6 @@
             android:visibility="gone"
             android:backgroundTint="@color/black"
             android:textColor="@color/white"
-            />
-
-
+            android:layout_gravity="center_horizontal" />
     </LinearLayout>
-
-
-
-
-
-
-
-    </LinearLayout>
+</ScrollView>
