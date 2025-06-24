@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.arthub.R;
 import com.example.arthub.Visitor.InvitationAdapter;
@@ -31,6 +32,7 @@ public class AdminManageInvitations extends AppCompatActivity {
     private List<Invitation> invitations = new ArrayList<>();
     private DatabaseReference dbRef;
     private DatabaseReference eventsRef;
+    private SwipeRefreshLayout swipeRefresh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +44,7 @@ public class AdminManageInvitations extends AppCompatActivity {
             Intent intent = new Intent(AdminManageInvitations.this, AdminAccountPage.class);
             startActivity(intent);
         });
-
+        swipeRefresh = findViewById(R.id.swipeRefresh);
         recyclerViewInvitations = findViewById(R.id.recyclerViewinvitations);
         recyclerViewInvitations.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewInvitations.setHasFixedSize(true);
@@ -54,6 +56,7 @@ public class AdminManageInvitations extends AppCompatActivity {
         recyclerViewInvitations.setAdapter(adapter);
 
         loadInvitations();
+        SwipeRefreshHelper.setupSwipeRefresh(swipeRefresh, this, this::loadInvitations);
     }
 
     private void loadInvitations() {
@@ -81,6 +84,7 @@ public class AdminManageInvitations extends AppCompatActivity {
                     }
                 }
                 adapter.notifyDataSetChanged();
+                swipeRefresh.setRefreshing(false);
             }
 
             @Override

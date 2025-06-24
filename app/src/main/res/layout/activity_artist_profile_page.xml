@@ -51,12 +51,15 @@
             android:layout_marginTop="16dp"
             android:paddingHorizontal="8dp">
 
-            <TextView
+            <EditText
                 android:id="@+id/ArtistUsername"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="Naveen(Artist)"
+                android:enabled="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="@color/black" />

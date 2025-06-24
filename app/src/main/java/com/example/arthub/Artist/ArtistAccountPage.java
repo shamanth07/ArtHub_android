@@ -9,21 +9,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.arthub.Auth.SignIn;
 import com.example.arthub.R;
 import com.example.arthub.Visitor.Settings;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.*;
+
 public class ArtistAccountPage extends AppCompatActivity implements View.OnClickListener {
 
     Button btnLogout;
     ImageView backbtn;
-    TextView artistName, artistprofile, applyforevent, artiststatus,favartworks,settings;
+    TextView artistName, artistprofile, applyforevent, artiststatus, settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,16 +37,14 @@ public class ArtistAccountPage extends AppCompatActivity implements View.OnClick
         artistprofile = findViewById(R.id.artistprofile);
         applyforevent = findViewById(R.id.applyforevent);
         artiststatus = findViewById(R.id.artiststatus);
-        favartworks = findViewById(R.id.favartworks);
         settings = findViewById(R.id.settings);
-
 
         btnLogout.setOnClickListener(this);
         backbtn.setOnClickListener(this);
         applyforevent.setOnClickListener(this);
         artiststatus.setOnClickListener(this);
         artistprofile.setOnClickListener(this);
-        favartworks.setOnClickListener(this);
+
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
@@ -56,6 +54,30 @@ public class ArtistAccountPage extends AppCompatActivity implements View.OnClick
                 username = email.split("@")[0];
             }
             artistName.setText(username + "(artist)");
+
+
+            String userId = user.getUid();
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
+            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        String userRole = snapshot.child("role").getValue(String.class);
+
+                        settings.setOnClickListener(view -> {
+                            Intent intent = new Intent(ArtistAccountPage.this, Settings.class);
+                            intent.putExtra("role", userRole);
+                            intent.putExtra("userId", userId);
+                            startActivity(intent);
+                        });
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Toast.makeText(ArtistAccountPage.this, "Error loading user info", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 
@@ -65,24 +87,16 @@ public class ArtistAccountPage extends AppCompatActivity implements View.OnClick
         if (id == R.id.btnLogout) {
             FirebaseAuth.getInstance().signOut();
             Toast.makeText(this, "Successfully logged out", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, SignIn.class);
-            startActivity(intent);
+            startActivity(new Intent(this, SignIn.class));
             finish();
         } else if (id == R.id.backbtn) {
-            Intent intent = new Intent(this, ArtistDashboard.class);
-            startActivity(intent);
+            startActivity(new Intent(this, ArtistDashboard.class));
         } else if (id == R.id.applyforevent) {
-            Intent intent = new Intent(this, ArtistApplyForEvent.class);
-            startActivity(intent);
+            startActivity(new Intent(this, ArtistApplyForEvent.class));
         } else if (id == R.id.artiststatus) {
-            Intent intent = new Intent(this, ArtistStatusPage.class);
-            startActivity(intent);
+            startActivity(new Intent(this, ArtistStatusPage.class));
         } else if (id == R.id.artistprofile) {
-            Intent intent = new Intent(this, ArtistProfilePage.class);
-            startActivity(intent);
-        } else if (id == R.id.settings) {
-            Intent intent = new Intent(this, Settings.class);
-            startActivity(intent);
+            startActivity(new Intent(this, ArtistProfilePage.class));
         }
     }
 }
