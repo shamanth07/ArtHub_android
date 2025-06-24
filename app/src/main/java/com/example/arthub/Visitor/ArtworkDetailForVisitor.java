@@ -1,5 +1,6 @@
 package com.example.arthub.Visitor;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,9 +18,10 @@ import com.google.firebase.database.ValueEventListener;
 
 public class ArtworkDetailForVisitor extends AppCompatActivity {
 
-    private ImageView artworkImage;
-    private TextView title, artistName, description, instagramLink, websiteLink;
+    private ImageView artworkImage,likeIcon;
+    private TextView  artistName,Email, instagramLink, websiteLink;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,9 +30,10 @@ public class ArtworkDetailForVisitor extends AppCompatActivity {
         String artworkId = getIntent().getStringExtra("artworkId");
 
         artworkImage = findViewById(R.id.artworkImage);
-        title = findViewById(R.id.artworkTitle);
+        likeIcon = findViewById(R.id.likeIcon);
+        Email = findViewById(R.id.Email);
+
         artistName = findViewById(R.id.artistName);
-        description = findViewById(R.id.artworkDescription);
         instagramLink = findViewById(R.id.instagramLink);
         websiteLink = findViewById(R.id.websiteLink);
 
@@ -44,10 +47,6 @@ public class ArtworkDetailForVisitor extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         Artwork artwork = snapshot.getValue(Artwork.class);
                         if (artwork != null) {
-                            title.setText(artwork.getTitle());
-                            description.setText(artwork.getDescription());
-
-
                             Glide.with(ArtworkDetailForVisitor.this)
                                     .load(artwork.getImageUrl())
                                     .into(artworkImage);
@@ -67,6 +66,7 @@ public class ArtworkDetailForVisitor extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         String email = snapshot.child("email").getValue(String.class);
+                        Email.setText(email);
                         String name = (email != null) ? email.split("@")[0] : "Unknown";
                         artistName.setText(name);
 
