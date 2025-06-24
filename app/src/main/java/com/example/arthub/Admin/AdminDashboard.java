@@ -49,7 +49,7 @@ public class AdminDashboard extends AppCompatActivity {
         setContentView(R.layout.activity_admin_dashboard);
 
         menuIcon = findViewById(R.id.menuIcon);
-       btnCreateEvent = findViewById(R.id.btnCreateEvent);
+        btnCreateEvent = findViewById(R.id.btnCreateEvent);
         recyclerViewEvents = findViewById(R.id.recyclerViewEvents);
         recyclerViewEvents.setLayoutManager(new LinearLayoutManager(this));
 
@@ -70,7 +70,7 @@ public class AdminDashboard extends AppCompatActivity {
         btnCreateEvent.setOnClickListener(v -> {
             Intent intent = new Intent(AdminDashboard.this, CreateEvent.class);
             startActivity(intent);
-            finish();
+
         });
     }
 
@@ -96,6 +96,7 @@ public class AdminDashboard extends AppCompatActivity {
             }
         });
     }
+
 
 
 

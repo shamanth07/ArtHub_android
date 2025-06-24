@@ -50,11 +50,10 @@ public class ArtistApplyForEvent extends AppCompatActivity {
             finish();
         });
 
-        // Step 1: Load applied event IDs, then load events
+
         loadAppliedEvents(() -> loadEvents());
     }
 
-    // Load events the artist has not applied to
     private void loadEvents() {
         eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -66,7 +65,6 @@ public class ArtistApplyForEvent extends AppCompatActivity {
                         String eventId = snap.getKey();
                         if (event != null && eventId != null) {
                             event.setEventId(eventId);
-                            // Only include events the artist has NOT applied to
                             if (!appliedEventIds.contains(eventId)) {
                                 eventList.add(event);
                             }
@@ -85,7 +83,7 @@ public class ArtistApplyForEvent extends AppCompatActivity {
         });
     }
 
-    // Load eventIds the artist has already applied to
+
     private void loadAppliedEvents(Runnable onComplete) {
         String artistId = mAuth.getCurrentUser().getUid();
         DatabaseReference invitationsRef = FirebaseDatabase.getInstance().getReference("invitations");
