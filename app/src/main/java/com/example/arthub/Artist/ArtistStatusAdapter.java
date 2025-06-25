@@ -94,7 +94,7 @@ public class ArtistStatusAdapter extends RecyclerView.Adapter<ArtistStatusAdapte
 
     private void fetchRSVPCount(String eventTitle, TextView rsvpTextView) {
         DatabaseReference rsvpCountRef = FirebaseDatabase.getInstance()
-                .getReference("rsvp_counts")
+                .getReference("rsvpcount")
                 .child(eventTitle)
                 .child("attending");
 
