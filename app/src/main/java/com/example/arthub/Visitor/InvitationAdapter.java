@@ -18,10 +18,10 @@ import java.util.List;
 
 public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.InviteViewHolder> {
 
-    private List<String> compositeKeys; // format: "eventId/artistId"
+    private List<String> compositeKeys;
     private List<Invitation> invitations;
-    private DatabaseReference dbRef;      // reference to "invitations" node
-    private DatabaseReference eventDbRef; // reference to "events" node
+    private DatabaseReference dbRef;
+    private DatabaseReference eventDbRef;
 
     public InvitationAdapter(List<String> compositeKeys, List<Invitation> invitations,
                              DatabaseReference dbRef, DatabaseReference eventDbRef) {

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_margin="8dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    android:padding="10dp">
+
+    <ImageView
+        android:id="@+id/imageArtwork"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:scaleType="centerCrop"
+        android:layout_marginBottom="8dp"
+        />
+
+    <TextView
+        android:id="@+id/textName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:text="artistName"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textBio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="bio"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        android:maxLines="2" />
+
+    <TextView
+        android:id="@+id/emailid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#888888"
+        android:text="Email"
+        android:textStyle="bold"
+        android:textSize="14sp" />
+
+</LinearLayout>

@@ -1,11 +1,15 @@
 package com.example.arthub.Visitor;
 
 
+import java.util.HashMap;
+import java.util.Map;
 
 public class Comment {
     public String comment;
     public long timestamp;
     public String userId;
+
+    public Map<String, Reply> replies = new HashMap<>();
 
 
     public Comment() { }

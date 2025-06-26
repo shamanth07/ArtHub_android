@@ -43,6 +43,7 @@ dependencies {
     implementation ("com.stripe:stripe-android:20.43.0")
     implementation(libs.firebase.inappmessaging)
     implementation (libs.appcompat.v161)
+    implementation(libs.recyclerview)
 
     annotationProcessor ("com.github.bumptech.glide:compiler:4.16.0")
     implementation ("com.google.android.gms:play-services-maps:18.1.0")// for map api

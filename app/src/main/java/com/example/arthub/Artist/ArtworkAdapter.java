@@ -221,10 +221,10 @@ public class ArtworkAdapter extends RecyclerView.Adapter<ArtworkAdapter.ArtworkV
                                 commentText.setText(commentTextVal != null ? commentTextVal : "");
                                 fetchUserEmail(userId, commentEmail);
 
-                                // 🔁 Set up reply button
+
                                 replyBtn.setOnClickListener(v -> showReplyDialog(artworkId, commentId, replyContainer));
 
-                                // ✅ Load existing replies automatically
+
                                 loadReplies(artworkId, commentId, replyContainer);
 
                                 commentsContainer.addView(commentView);
@@ -233,7 +233,7 @@ public class ArtworkAdapter extends RecyclerView.Adapter<ArtworkAdapter.ArtworkV
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
-                            // Optional: handle error
+
                         }
                     });
                 }

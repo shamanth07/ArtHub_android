@@ -79,21 +79,32 @@
     </LinearLayout>
 
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewvisitortEvents"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:scrollbars="vertical"
-        android:visibility="gone" />
 
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewvisitorartworks"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:scrollbars="vertical"
-        android:visibility="visible" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewvisitorartworks"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:scrollbars="vertical"
+            android:visibility="visible" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewvisitortEvents"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:scrollbars="vertical"
+            android:visibility="gone" />
+
+
+
+
+
+
+
+
+
+
 
 </LinearLayout>

@@ -121,7 +121,7 @@ public class ArtistEventDetailActivity extends AppCompatActivity {
 
     private void fetchRSVPCount(String eventTitle) {
         DatabaseReference rsvpCountRef = FirebaseDatabase.getInstance()
-                .getReference("rsvp_counts")
+                .getReference()
                 .child(eventTitle)
                 .child("attending");
 

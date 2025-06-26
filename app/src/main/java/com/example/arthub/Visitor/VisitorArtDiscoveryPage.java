@@ -31,6 +31,11 @@ public class VisitorArtDiscoveryPage extends AppCompatActivity {
     VisitorArtworkAdapter adapter;
     List<Artwork> artworkList = new ArrayList<>();
 
+    DatabaseReference artworksRef;
+    ValueEventListener artworkListener;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,8 +53,6 @@ public class VisitorArtDiscoveryPage extends AppCompatActivity {
             Intent intent = new Intent(VisitorArtDiscoveryPage.this, VisitorAccountPage.class);
             startActivity(intent);
         });
-
-        loadArtworksFromFirebase();
 
         searchartist.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -75,11 +78,27 @@ public class VisitorArtDiscoveryPage extends AppCompatActivity {
                 adapter.updateList(filteredList);
             }
         });
+
+
+        artworksRef = FirebaseDatabase.getInstance().getReference("artworks");
     }
 
-    private void loadArtworksFromFirebase() {
-        DatabaseReference artworksRef = FirebaseDatabase.getInstance().getReference("artworks");
-        artworksRef.addListenerForSingleValueEvent(new ValueEventListener() {
+    @Override
+    protected void onStart() {
+        super.onStart();
+        loadArtworksInRealTime();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (artworkListener != null) {
+            artworksRef.removeEventListener(artworkListener);
+        }
+    }
+
+    private void loadArtworksInRealTime() {
+        artworkListener = artworksRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 artworkList.clear();

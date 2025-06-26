@@ -58,8 +58,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@drawable/unliked"
-                android:layout_marginEnd="4dp"
-          />
+                android:layout_marginEnd="4dp" />
 
             <TextView
                 android:id="@+id/likeCount"
@@ -75,8 +74,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@drawable/comment"
-                android:layout_marginEnd="4dp"
-             />
+                android:layout_marginEnd="4dp" />
 
             <TextView
                 android:id="@+id/commentCount"
@@ -86,6 +84,16 @@
                 android:textSize="14sp"
                 android:textColor="@android:color/black" />
         </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/replyContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="8dp"
+            android:paddingStart="32dp"
+            android:paddingBottom="8dp" />
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>
