@@ -37,7 +37,7 @@ public class AdminReportsActivity extends AppCompatActivity {
     }
 
     private void loadReports() {
-        AdminReportGenerator.generateReports(this); // Optional: this might generate test data
+        AdminReportGenerator.generateReports(this);
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("adminreports");
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -49,12 +49,12 @@ public class AdminReportsActivity extends AppCompatActivity {
                     if (rep != null) reportList.add(rep);
                 }
                 adapter.notifyDataSetChanged();
-                swipeRefresh.setRefreshing(false); // stop the refresh animation here
+                swipeRefresh.setRefreshing(false);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError e) {
-                swipeRefresh.setRefreshing(false); // also stop on failure
+                swipeRefresh.setRefreshing(false);
             }
         });
     }

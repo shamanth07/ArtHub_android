@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.arthub.Admin.Event;
 import com.example.arthub.R;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
@@ -25,10 +24,10 @@ public class VisitorBookingHistoryAdapter extends RecyclerView.Adapter<VisitorBo
     private final List<VisitorBooking> bookingList;
     private final String userId;
 
-    public VisitorBookingHistoryAdapter(Context context, List<VisitorBooking> bookingList) {
+    public VisitorBookingHistoryAdapter(Context context, List<VisitorBooking> bookingList, String userId) {
         this.context = context;
         this.bookingList = bookingList;
-        this.userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        this.userId = userId;
     }
 
     @NonNull
@@ -43,28 +42,21 @@ public class VisitorBookingHistoryAdapter extends RecyclerView.Adapter<VisitorBo
         VisitorBooking booking = bookingList.get(position);
         Event event = booking.getEvent();
 
-        // Set event title and location
         holder.titleText.setText(event.getTitle());
         holder.locationText.setText("📍 " + event.getLocation());
-
-        // Set event date and time
         holder.dateTimeText.setText("📅 " + event.getEventDate() + " at " + event.getTime());
-
-        // Set ticket and price info
         holder.ticketsText.setText("Tickets: " + booking.getTicketsBooked());
+
         holder.priceText.setText(String.format(Locale.getDefault(),
                 "Subtotal: ₹%.2f\nTax: ₹%.2f\nTotal: ₹%.2f",
                 booking.getSubtotal(),
                 booking.getTax(),
                 booking.getTotal()));
 
-        // Set booking timestamp
         holder.bookingDateText.setText("Booked on: " + booking.getBookingTimestamp());
 
-        // Cancel booking handler
         holder.cancelButton.setOnClickListener(v -> {
             FirebaseDatabase.getInstance().getReference("bookings")
-                    .child(userId)
                     .child(booking.getBookingId())
                     .removeValue()
                     .addOnSuccessListener(aVoid -> {

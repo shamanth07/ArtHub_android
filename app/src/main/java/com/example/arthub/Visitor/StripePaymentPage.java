@@ -202,11 +202,11 @@ public class StripePaymentPage extends AppCompatActivity {
                     DatabaseReference rsvpRef = FirebaseDatabase.getInstance().getReference("rsvp");
                     String eventName = event.getTitle();
 
-                    // Save tickets booked under rsvp/{eventName}/{userId}/tickets
+
                     rsvpRef.child(eventName).child(userId).child("tickets").setValue(ticketsBooked)
                             .addOnSuccessListener(aVoid -> {
 
-                                // Increment rsvp_counts/{eventName}/attending by ticketsBooked
+                                // Increment rsvp_counts by ticketsBooked
                                 DatabaseReference rsvpCountRef = FirebaseDatabase.getInstance()
                                         .getReference("rsvpcount")
                                         .child(eventName)

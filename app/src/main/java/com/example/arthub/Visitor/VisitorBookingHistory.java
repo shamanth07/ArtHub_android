@@ -18,7 +18,7 @@ import java.util.List;
 public class VisitorBookingHistory extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private SwipeRefreshLayout swipeRefreshLayout;
+    private SwipeRefreshLayout swipeRefresh;
     private VisitorBookingHistoryAdapter adapter;
     private List<VisitorBooking> bookingList;
     private DatabaseReference bookingsRef;
@@ -30,24 +30,24 @@ public class VisitorBookingHistory extends AppCompatActivity {
         setContentView(R.layout.activity_visitor_booking_history);
 
         recyclerView = findViewById(R.id.bookingRecyclerView);
-        swipeRefreshLayout = findViewById(R.id.swipeRefresh);
+        swipeRefresh = findViewById(R.id.swipeRefresh);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        bookingsRef = FirebaseDatabase.getInstance().getReference("bookings").child(userId);
+        bookingsRef = FirebaseDatabase.getInstance().getReference("bookings");
 
         bookingList = new ArrayList<>();
-        adapter = new VisitorBookingHistoryAdapter(this, bookingList);
+        adapter = new VisitorBookingHistoryAdapter(this, bookingList, userId);
         recyclerView.setAdapter(adapter);
 
         loadBookings();
 
-        swipeRefreshLayout.setOnRefreshListener(this::loadBookings);
+        swipeRefresh.setOnRefreshListener(this::loadBookings);
     }
 
     private void loadBookings() {
-        swipeRefreshLayout.setRefreshing(true);
-        bookingsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        swipeRefresh.setRefreshing(true);
+        bookingsRef.orderByChild("userId").equalTo(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 bookingList.clear();
@@ -59,12 +59,12 @@ public class VisitorBookingHistory extends AppCompatActivity {
                     }
                 }
                 adapter.notifyDataSetChanged();
-                swipeRefreshLayout.setRefreshing(false);
+                swipeRefresh.setRefreshing(false);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                swipeRefreshLayout.setRefreshing(false);
+                swipeRefresh.setRefreshing(false);
             }
         });
     }

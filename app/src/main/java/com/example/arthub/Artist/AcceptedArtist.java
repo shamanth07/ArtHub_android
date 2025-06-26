@@ -6,7 +6,7 @@ public class AcceptedArtist {
 
     private int likeCount;
 
-    public AcceptedArtist() {}  // Empty constructor for Firebase
+    public AcceptedArtist() {}
 
     public AcceptedArtist(String artistId, String artistName, int likeCount) {
         this.artistId = artistId;

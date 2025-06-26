@@ -100,7 +100,7 @@ public class EditEvent extends AppCompatActivity implements OnMapReadyCallback {
                     if (latLng != null) {
                         latitude = latLng.latitude;
                         longitude = latLng.longitude;
-                        selectedEventLocation = place.getAddress(); // ✅ Full location
+                        selectedEventLocation = place.getAddress();
 
                         if (map != null) {
                             map.clear();

@@ -82,7 +82,7 @@ public class VisitorFavouritesArtworks extends AppCompatActivity {
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
-                            // Handle error if needed
+
                         }
                     });
                 }
@@ -90,7 +90,7 @@ public class VisitorFavouritesArtworks extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Handle error if needed
+
             }
         });
     }

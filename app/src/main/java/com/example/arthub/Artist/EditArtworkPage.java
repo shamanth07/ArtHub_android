@@ -80,7 +80,7 @@ public class EditArtworkPage extends AppCompatActivity {
         saveArtworkButton.setOnClickListener(v -> saveArtwork());
 
         backbtn.setOnClickListener(v -> {
-            finish(); // Just finish this activity to go back
+            finish();
         });
     }
 
@@ -146,7 +146,7 @@ public class EditArtworkPage extends AppCompatActivity {
         dialog.show();
 
         if (imageUri != null) {
-            // Upload new image
+
             StorageReference imageRef = storage.getReference().child("artwork_images/" + artworkId + ".jpg");
             imageRef.putFile(imageUri)
                     .addOnSuccessListener(taskSnapshot -> imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
@@ -158,7 +158,7 @@ public class EditArtworkPage extends AppCompatActivity {
                         Toast.makeText(this, "Image upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     });
         } else {
-            // Use existing image URL
+
             saveArtworkData(title, desc, catg, year, price, existingImageUrl, dialog);
         }
     }
@@ -176,7 +176,7 @@ public class EditArtworkPage extends AppCompatActivity {
         updatedData.put("artistId", artistId);
         updatedData.put("id", artworkId);
 
-        // Update artist-specific node
+
         database.getReference()
                 .child("artists")
                 .child(artistId)
@@ -185,7 +185,7 @@ public class EditArtworkPage extends AppCompatActivity {
                 .setValue(updatedData)
                 .addOnFailureListener(e -> Log.e("EditArtworkPage", "Failed to update artist node: " + e.getMessage()));
 
-        // Update seperate artworks node
+
         database.getReference()
                 .child("artworks")
                 .child(artworkId)

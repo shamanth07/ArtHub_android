@@ -231,7 +231,7 @@ public class VisitorEventDetail extends AppCompatActivity {
     }
 
     private void setupBookButton() {
-        bookbtn.setEnabled(true); // Always enabled
+        bookbtn.setEnabled(true);
         bookbtn.setOnClickListener(view -> {
             Intent intent = new Intent(VisitorEventDetail.this, StripePaymentPage.class);
             intent.putExtra("price", totalVal);

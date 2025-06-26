@@ -135,10 +135,10 @@ public class VisitorArtworkAdapter extends RecyclerView.Adapter<VisitorArtworkAd
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    // User already liked: unlike it
+
                     likeRef.removeValue().addOnCompleteListener(task -> {
                         holder.likeIcon.setImageResource(R.drawable.unliked);
-                        // Update like count UI
+
                         likesNode.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -153,10 +153,10 @@ public class VisitorArtworkAdapter extends RecyclerView.Adapter<VisitorArtworkAd
                         });
                     });
                 } else {
-                    // User hasn't liked yet: like it
+
                     likeRef.setValue(true).addOnCompleteListener(task -> {
                         holder.likeIcon.setImageResource(R.drawable.liked);
-                        // Update like count UI
+
                         likesNode.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -225,7 +225,7 @@ public class VisitorArtworkAdapter extends RecyclerView.Adapter<VisitorArtworkAd
                     TextView commentEmail = commentView.findViewById(R.id.commentEmail);
                     ViewGroup replyContainer = commentView.findViewById(R.id.replyContainer);
                     TextView replyButton = commentView.findViewById(R.id.replyButton);
-                    replyButton.setVisibility(View.GONE); // Hide reply button for visitors
+                    replyButton.setVisibility(View.GONE);
 
                     commentText.setText(comment != null ? comment : "");
                     if (timestamp != null) {
@@ -345,7 +345,7 @@ public class VisitorArtworkAdapter extends RecyclerView.Adapter<VisitorArtworkAd
             if (task.isSuccessful()) {
                 Toast.makeText(context, "Comment posted", Toast.LENGTH_SHORT).show();
                 commentInput.setText("");
-                // Refresh comments list
+
                 loadAllComments(artworkId, commentsContainer);
                 loadCommentCount(artworkId, holder);
             } else {

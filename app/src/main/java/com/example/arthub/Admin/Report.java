@@ -12,7 +12,7 @@ public class Report {
     private int totalLikes;
 
     public Report() {
-        // Default constructor required for calls to DataSnapshot.getValue(Report.class)
+
     }
 
     public Report(String title, String bannerImageUrl, int interestedCount, int rsvpCount,

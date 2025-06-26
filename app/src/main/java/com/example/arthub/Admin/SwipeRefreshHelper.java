@@ -18,12 +18,12 @@ public class SwipeRefreshHelper {
 
             Toast.makeText(context, "Refreshing...", Toast.LENGTH_SHORT).show();
 
-            // Execute user-defined callback logic
+
             if (callback != null) {
                 callback.onRefresh();
             }
 
-            // Stop the animation (you can control this manually too)
+
 
         });
     }

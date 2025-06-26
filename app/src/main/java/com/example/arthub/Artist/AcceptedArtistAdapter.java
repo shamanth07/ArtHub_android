@@ -49,7 +49,7 @@ public class AcceptedArtistAdapter extends RecyclerView.Adapter<AcceptedArtistAd
                 .child(artist.getArtistId())
                 .child(visitorId);
 
-        // 🔁 Fetch and set initial like button state
+
         likeRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -64,10 +64,10 @@ public class AcceptedArtistAdapter extends RecyclerView.Adapter<AcceptedArtistAd
             public void onCancelled(@NonNull DatabaseError error) {}
         });
 
-        // ✅ Fetch and display initial like count
+
         updateLikeCount(artist, holder);
 
-        // Toggle like on click
+
         holder.likeButton.setOnClickListener(v -> {
             likeRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
