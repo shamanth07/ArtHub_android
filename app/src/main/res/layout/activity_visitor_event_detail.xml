@@ -19,13 +19,14 @@
 
         <TextView android:id="@+id/textTitle"
             android:textStyle="bold"
-            android:textSize="20sp"
+            android:textSize="35sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <TextView android:id="@+id/textLocation"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            />
 
         <TextView android:id="@+id/textDate"
             android:layout_width="wrap_content"
@@ -41,7 +42,8 @@
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:paddingBottom="30dp">
 
             <TextView android:text="Tickets:"
                 android:layout_width="wrap_content"
@@ -67,16 +69,31 @@
                 android:src="@drawable/plus"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:layout_marginRight="80dp"/>
+                android:layout_marginRight="80dp"
+                />
 
 
-            <TextView
-                android:id="@+id/showprice"
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="20dp"
+            >
+            <Button
+                android:id="@+id/attending"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
-                android:textStyle="bold"
+                android:text="✔Attending"
+                android:layout_marginRight="20dp"
+
+                android:backgroundTint="@color/green"
                 />
+
+
+
         </LinearLayout>
 
         <TextView android:id="@+id/textSubtotal"
@@ -102,5 +119,21 @@
             android:backgroundTint="@color/blue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/textArtistsHeader"
+            android:text="Featured Artists"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_marginTop="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerAcceptedArtists"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:nestedScrollingEnabled="false"/>
     </LinearLayout>
+
 </ScrollView>

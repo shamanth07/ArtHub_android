@@ -17,7 +17,6 @@ public class VisitorBooking {
         // Required for Firebase
     }
 
-    // Getters and setters
     public String getBookingId() {
         return bookingId;
     }

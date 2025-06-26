@@ -40,7 +40,7 @@ public class EditEvent extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final int PICK_IMAGE_REQUEST = 1;
 
-    private EditText titleInput, descriptionInput, timeInput, maxArtistsInput,priceid;
+    private EditText titleInput, descriptionInput, timeInput, maxArtistsInput, priceid;
     private DatePicker datePicker;
     private ImageView bannerImage;
     private Button actionButton;
@@ -50,7 +50,6 @@ public class EditEvent extends AppCompatActivity implements OnMapReadyCallback {
 
     private double latitude = 0.0;
     private double longitude = 0.0;
-
     private String selectedEventLocation;
 
     private StorageReference storageRef;
@@ -71,7 +70,6 @@ public class EditEvent extends AppCompatActivity implements OnMapReadyCallback {
         datePicker = findViewById(R.id.datePicker);
         bannerImage = findViewById(R.id.uploadImage);
         priceid = findViewById(R.id.priceid);
-
         actionButton = findViewById(R.id.createButton);
 
         storageRef = FirebaseStorage.getInstance().getReference("event_banners");
@@ -80,26 +78,21 @@ public class EditEvent extends AppCompatActivity implements OnMapReadyCallback {
         Calendar today = Calendar.getInstance();
         datePicker.setMinDate(today.getTimeInMillis());
 
-        // Setup map
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.mapFragment);
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
 
-
-
-        // Initialize Places if not already
         if (!Places.isInitialized()) {
             Places.initialize(getApplicationContext(), "AIzaSyCz39FE9RCbShlRfF2wZuw08JqfT-hZVvA");
         }
 
-        // Add AutocompleteSupportFragment for selecting place
         AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
 
         if (autocompleteFragment != null) {
-            autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
+            autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.ADDRESS, Place.Field.LAT_LNG));
             autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
                 @Override
                 public void onPlaceSelected(@NonNull Place place) {
@@ -107,7 +100,7 @@ public class EditEvent extends AppCompatActivity implements OnMapReadyCallback {
                     if (latLng != null) {
                         latitude = latLng.latitude;
                         longitude = latLng.longitude;
-                        selectedEventLocation = place.getName();
+                        selectedEventLocation = place.getAddress(); // ✅ Full location
 
                         if (map != null) {
                             map.clear();
@@ -123,7 +116,6 @@ public class EditEvent extends AppCompatActivity implements OnMapReadyCallback {
                 }
             });
         }
-
 
         if (getIntent().hasExtra("event")) {
             existingEvent = (Event) getIntent().getSerializableExtra("event");
@@ -146,7 +138,7 @@ public class EditEvent extends AppCompatActivity implements OnMapReadyCallback {
         descriptionInput.setText(event.getDescription());
         timeInput.setText(event.getTime());
         maxArtistsInput.setText(String.valueOf(event.getMaxArtists()));
-
+        priceid.setText(String.valueOf(event.getticketPrice()));
 
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(event.getEventDate());
@@ -155,10 +147,8 @@ public class EditEvent extends AppCompatActivity implements OnMapReadyCallback {
         Glide.with(this).load(event.getBannerImageUrl()).into(bannerImage);
 
         selectedEventLocation = event.getLocation();
-
         latitude = event.getLatitude();
         longitude = event.getLongitude();
-        priceid.setText(String.valueOf(event.getticketPrice()));
     }
 
     private void openImagePicker() {
@@ -201,8 +191,7 @@ public class EditEvent extends AppCompatActivity implements OnMapReadyCallback {
         String description = descriptionInput.getText().toString().trim();
         String time = timeInput.getText().toString().trim();
         int maxArtists = Integer.parseInt(maxArtistsInput.getText().toString().trim());
-       double  price = Double.parseDouble(priceid.getText().toString().trim());
-
+        double price = Double.parseDouble(priceid.getText().toString().trim());
 
         Calendar cal = Calendar.getInstance();
         cal.set(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
@@ -210,20 +199,27 @@ public class EditEvent extends AppCompatActivity implements OnMapReadyCallback {
 
         if (selectedImageUri != null) {
             StorageReference imageRef = storageRef.child("banner_" + eventId + ".jpg");
-            imageRef.putFile(selectedImageUri).addOnSuccessListener(taskSnapshot ->
-                    imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                        saveUpdatedEvent(eventId, title, description, dateMillis, time, maxArtists, uri.toString(),selectedEventLocation, latitude, longitude,price);
-                    })
-            ).addOnFailureListener(e ->
-                    Toast.makeText(this, "Image upload failed: " + e.getMessage(), Toast.LENGTH_LONG).show()
-            );
+            imageRef.putFile(selectedImageUri)
+                    .addOnSuccessListener(taskSnapshot ->
+                            imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                                saveUpdatedEvent(eventId, title, description, dateMillis, time, maxArtists,
+                                        uri.toString(), selectedEventLocation, latitude, longitude, price);
+                            })
+                    )
+                    .addOnFailureListener(e ->
+                            Toast.makeText(this, "Image upload failed: " + e.getMessage(), Toast.LENGTH_LONG).show()
+                    );
         } else {
-            saveUpdatedEvent(eventId, title, description, dateMillis, time, maxArtists, existingEvent.getBannerImageUrl(),selectedEventLocation, latitude, longitude,price);
+            saveUpdatedEvent(eventId, title, description, dateMillis, time, maxArtists,
+                    existingEvent.getBannerImageUrl(), selectedEventLocation, latitude, longitude, price);
         }
     }
 
-    private void saveUpdatedEvent(String eventId, String title, String description, long date, String time, int maxArtists, String bannerUrl, String selectedEventLocation,double latitude, double longitude,double ticketPrice) {
-        Event updatedEvent = new Event(eventId, title, description, date, time, maxArtists, bannerUrl,selectedEventLocation,latitude, longitude,ticketPrice);
+    private void saveUpdatedEvent(String eventId, String title, String description, long date, String time,
+                                  int maxArtists, String bannerUrl, String location,
+                                  double latitude, double longitude, double ticketPrice) {
+        Event updatedEvent = new Event(eventId, title, description, date, time, maxArtists, bannerUrl,
+                location, latitude, longitude, ticketPrice);
 
         eventsRef.child(eventId).setValue(updatedEvent)
                 .addOnSuccessListener(unused -> {

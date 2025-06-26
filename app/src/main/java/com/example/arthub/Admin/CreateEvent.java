@@ -77,12 +77,12 @@ public class CreateEvent extends AppCompatActivity implements OnMapReadyCallback
 
         bannerImage.setOnClickListener(v -> openImagePicker());
 
-
+        // Initialize Places
         if (!Places.isInitialized()) {
             Places.initialize(getApplicationContext(), "AIzaSyCz39FE9RCbShlRfF2wZuw08JqfT-hZVvA");
         }
 
-
+        // Initialize map fragment
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapFragment);
         if (mapFragment != null) mapFragment.getMapAsync(this);
 
@@ -117,7 +117,7 @@ public class CreateEvent extends AppCompatActivity implements OnMapReadyCallback
                 uploadBannerImageAndSaveEvent();
             }
         });
-
+        deleteExpiredEvents();
     }
 
     private GoogleMap mMap;
@@ -144,28 +144,38 @@ public class CreateEvent extends AppCompatActivity implements OnMapReadyCallback
 
     private void uploadBannerImageAndSaveEvent() {
         String eventId = eventsRef.push().getKey();
-        if (eventId == null || selectedImageUri == null) {
-            Toast.makeText(this, "Missing event ID or image", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        if (eventId == null) return;
 
-
-        StorageReference imageRef = FirebaseStorage.getInstance()
-                .getReference()
-                .child("event_banners/banner_" + eventId + ".jpg");
-
-        imageRef.putFile(selectedImageUri)
-                .addOnSuccessListener(taskSnapshot ->
-                        imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                            String downloadUrl = uri.toString();
-                            saveEventToDatabase(eventId, downloadUrl);
-                        })
-                ).addOnFailureListener(e ->
-                        Toast.makeText(this, "Image upload failed: " + e.getMessage(), Toast.LENGTH_LONG).show()
-                );
+        StorageReference imageRef = storageRef.child("banner_" + eventId + ".jpg");
+        imageRef.putFile(selectedImageUri).addOnSuccessListener(taskSnapshot ->
+                imageRef.getDownloadUrl().addOnSuccessListener(uri ->
+                        saveEventToDatabase(eventId, uri.toString())
+                )
+        ).addOnFailureListener(e ->
+                Toast.makeText(this, "Image upload failed: " + e.getMessage(), Toast.LENGTH_LONG).show()
+        );
     }
+    private void deleteExpiredEvents() {
+        DatabaseReference eventsRef = FirebaseDatabase.getInstance().getReference("events");
+        long today = Calendar.getInstance().getTimeInMillis();
 
-
+        eventsRef.get().addOnSuccessListener(dataSnapshot -> {
+            for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
+                Long eventDate = eventSnapshot.child("eventDate").getValue(Long.class);
+                if (eventDate != null && eventDate < today) {
+                    eventSnapshot.getRef().removeValue()
+                            .addOnSuccessListener(unused ->
+                                    Toast.makeText(CreateEvent.this, "Deleted expired event: " + eventSnapshot.getKey(), Toast.LENGTH_SHORT).show()
+                            )
+                            .addOnFailureListener(e ->
+                                    Toast.makeText(CreateEvent.this, "Failed to delete event: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                            );
+                }
+            }
+        }).addOnFailureListener(e ->
+                Toast.makeText(this, "Failed to fetch events for cleanup: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+        );
+    }
 
     private void saveEventToDatabase(String eventId, String bannerImageUrl) {
 

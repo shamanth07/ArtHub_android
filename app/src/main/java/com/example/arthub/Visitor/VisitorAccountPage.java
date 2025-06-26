@@ -1,9 +1,7 @@
 package com.example.arthub.Visitor;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -26,10 +24,9 @@ public class VisitorAccountPage extends AppCompatActivity {
 
     ImageView backbtn;
     Button btnLogout;
-    TextView visitorName,visitorprofile,visitorbookinghistory,settings,favartworks;
+    TextView visitorName,visitorprofile;
 
 
-    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,9 +39,6 @@ public class VisitorAccountPage extends AppCompatActivity {
         btnLogout = findViewById(R.id.btnLogout);
         visitorName = findViewById(R.id.visitorName);
         visitorprofile = findViewById(R.id.visitorprofile);
-        visitorbookinghistory = findViewById(R.id.visitorbookinghistory);
-        settings = findViewById(R.id.settings);
-        favartworks = findViewById(R.id.favartworks);
 
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -55,7 +49,7 @@ public class VisitorAccountPage extends AppCompatActivity {
                 username = email.split("@")[0];
 
             }
-            visitorName.setText(username + "(visitor)");
+           visitorName.setText(username + "(visitor)");
         }
 
         btnLogout.setOnClickListener(v -> {
@@ -67,21 +61,6 @@ public class VisitorAccountPage extends AppCompatActivity {
         });
         visitorprofile.setOnClickListener(v -> {
             Intent intent = new Intent(VisitorAccountPage.this, VisitorProfilePage.class);
-            startActivity(intent);
-
-        });
-        visitorbookinghistory.setOnClickListener(v -> {
-            Intent intent = new Intent(VisitorAccountPage.this, VisitorBookingHistory.class);
-            startActivity(intent);
-
-        });
-        favartworks.setOnClickListener(v -> {
-            Intent intent = new Intent(VisitorAccountPage.this, VisitorFavourtsArtist.class);
-            startActivity(intent);
-
-        });
-        settings.setOnClickListener(v -> {
-            Intent intent = new Intent(VisitorAccountPage.this, Settings.class);
             startActivity(intent);
 
         });

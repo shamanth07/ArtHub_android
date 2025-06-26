@@ -12,9 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
-
 
 import com.bumptech.glide.Glide;
 import com.example.arthub.Artist.Artwork;
@@ -25,8 +23,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.MutableData;
-import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
@@ -58,10 +54,9 @@ public class VisitorArtworkAdapter extends RecyclerView.Adapter<VisitorArtworkAd
         String currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
 
         holder.artworkTitle.setText(artwork.getTitle());
-        holder.likeCount.setText(String.valueOf(artwork.getLikes()));
-
 
         loadCommentCount(artworkId, holder);
+        loadLikeCount(artworkId, holder);
 
         Glide.with(context)
                 .load(artwork.getImageUrl())
@@ -70,18 +65,18 @@ public class VisitorArtworkAdapter extends RecyclerView.Adapter<VisitorArtworkAd
 
         String artistId = artwork.getArtistId();
         if (artistNameCache.containsKey(artistId)) {
-            holder.artistName.setText( artistNameCache.get(artistId));
+            holder.artistName.setText(artistNameCache.get(artistId));
         } else {
             holder.artistName.setText("unknown");
             fetchArtistName(artistId, holder);
         }
 
-
         DatabaseReference likeRef = FirebaseDatabase.getInstance()
                 .getReference("artworkInteractions")
-                .child(artworkId)
+                .child(artwork.getId())
                 .child("likes")
                 .child(currentUserId);
+
         likeRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -102,7 +97,26 @@ public class VisitorArtworkAdapter extends RecyclerView.Adapter<VisitorArtworkAd
             intent.putExtra("artworkId", artwork.getId());
             context.startActivity(intent);
         });
+    }
 
+    private void loadLikeCount(String artworkId, ViewHolder holder) {
+        DatabaseReference likesRef = FirebaseDatabase.getInstance()
+                .getReference("artworkInteractions")
+                .child(artworkId)
+                .child("likes");
+
+        likesRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                long count = snapshot.getChildrenCount(); // number of users who liked
+                holder.likeCount.setText(String.valueOf(count));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                holder.likeCount.setText("0");
+            }
+        });
     }
 
     private void toggleLike(String artworkId, String userId, ViewHolder holder) {
@@ -112,58 +126,57 @@ public class VisitorArtworkAdapter extends RecyclerView.Adapter<VisitorArtworkAd
                 .child("likes")
                 .child(userId);
 
-        DatabaseReference artworkRef = FirebaseDatabase.getInstance().getReference("artworks").child(artworkId);
-
+        DatabaseReference likesNode = FirebaseDatabase.getInstance()
+                .getReference("artworkInteractions")
+                .child(artworkId)
+                .child("likes");
 
         likeRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                boolean liked = snapshot.exists() && Boolean.TRUE.equals(snapshot.getValue(Boolean.class));
+                if (snapshot.exists()) {
+                    // User already liked: unlike it
+                    likeRef.removeValue().addOnCompleteListener(task -> {
+                        holder.likeIcon.setImageResource(R.drawable.unliked);
+                        // Update like count UI
+                        likesNode.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                long likeCount = snapshot.getChildrenCount();
+                                holder.likeCount.setText(String.valueOf(likeCount));
+                            }
 
-                if (liked) {
-                    likeRef.removeValue();
-                    artworkRef.child("likes").runTransaction(new Transaction.Handler() {
-                        @NonNull
-                        @Override
-                        public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                            Integer currentLikes = currentData.getValue(Integer.class);
-                            if (currentLikes == null) currentLikes = 0;
-                            currentData.setValue(Math.max(currentLikes - 1, 0));
-                            return Transaction.success(currentData);
-                        }
-
-                        @Override
-                        public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot snapshot) {
-                            holder.likeIcon.setImageResource(R.drawable.unliked);
-                            Integer newLikes = snapshot != null ? snapshot.getValue(Integer.class) : 0;
-                            holder.likeCount.setText(String.valueOf(newLikes != null ? newLikes : 0));
-                        }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                holder.likeCount.setText("0");
+                            }
+                        });
                     });
-
                 } else {
-                    likeRef.setValue(true);
-                    artworkRef.child("likes").runTransaction(new Transaction.Handler() {
-                        @NonNull
-                        @Override
-                        public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                            Integer currentLikes = currentData.getValue(Integer.class);
-                            if (currentLikes == null) currentLikes = 0;
-                            currentData.setValue(currentLikes + 1);
-                            return Transaction.success(currentData);
-                        }
+                    // User hasn't liked yet: like it
+                    likeRef.setValue(true).addOnCompleteListener(task -> {
+                        holder.likeIcon.setImageResource(R.drawable.liked);
+                        // Update like count UI
+                        likesNode.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                long likeCount = snapshot.getChildrenCount();
+                                holder.likeCount.setText(String.valueOf(likeCount));
+                            }
 
-                        @Override
-                        public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot snapshot) {
-                            holder.likeIcon.setImageResource(R.drawable.liked);
-                            Integer newLikes = snapshot != null ? snapshot.getValue(Integer.class) : 0;
-                            holder.likeCount.setText(String.valueOf(newLikes != null ? newLikes : 0));
-                        }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                holder.likeCount.setText("0");
+                            }
+                        });
                     });
                 }
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {}
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(context, "Failed to toggle like", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
@@ -176,7 +189,6 @@ public class VisitorArtworkAdapter extends RecyclerView.Adapter<VisitorArtworkAd
         ImageView sendBtn = sheetView.findViewById(R.id.sendCommentBtn);
         ViewGroup commentsContainer = sheetView.findViewById(R.id.commentsContainer);
 
-
         loadAllComments(artworkId, commentsContainer);
 
         sendBtn.setOnClickListener(v -> {
@@ -185,7 +197,7 @@ public class VisitorArtworkAdapter extends RecyclerView.Adapter<VisitorArtworkAd
                 Toast.makeText(context, "Comment cannot be empty", Toast.LENGTH_SHORT).show();
                 return;
             }
-            addCommentToFirebase(artworkId, commentText, bottomSheetDialog, holder, commentsContainer,commentInput);
+            addCommentToFirebase(artworkId, commentText, bottomSheetDialog, holder, commentsContainer, commentInput);
         });
 
         bottomSheetDialog.show();
@@ -211,6 +223,9 @@ public class VisitorArtworkAdapter extends RecyclerView.Adapter<VisitorArtworkAd
                     TextView commentText = commentView.findViewById(R.id.commentText);
                     TextView commentTime = commentView.findViewById(R.id.commentTime);
                     TextView commentEmail = commentView.findViewById(R.id.commentEmail);
+                    ViewGroup replyContainer = commentView.findViewById(R.id.replyContainer);
+                    TextView replyButton = commentView.findViewById(R.id.replyButton);
+                    replyButton.setVisibility(View.GONE); // Hide reply button for visitors
 
                     commentText.setText(comment != null ? comment : "");
                     if (timestamp != null) {
@@ -220,7 +235,6 @@ public class VisitorArtworkAdapter extends RecyclerView.Adapter<VisitorArtworkAd
                         commentTime.setText("");
                     }
 
-
                     if (userId != null) {
                         fetchUserEmail(userId, commentEmail);
                     } else {
@@ -228,11 +242,34 @@ public class VisitorArtworkAdapter extends RecyclerView.Adapter<VisitorArtworkAd
                     }
 
                     commentsContainer.addView(commentView);
+
+                    // Load replies
+                    DataSnapshot repliesSnap = commentSnap.child("replies");
+                    for (DataSnapshot replySnap : repliesSnap.getChildren()) {
+                        Reply reply = replySnap.getValue(Reply.class);
+                        if (reply == null) continue;
+
+                        View replyView = LayoutInflater.from(context).inflate(R.layout.item_reply, commentsContainer, false);
+                        TextView replyText = replyView.findViewById(R.id.replyText);
+                        TextView replyUser = replyView.findViewById(R.id.replyUser);
+
+                        replyText.setText(reply.comment != null ? reply.comment : "");
+
+                        if (reply.userId != null) {
+                            fetchUserEmail(reply.userId, replyUser);
+                        } else {
+                            replyUser.setText("Unknown");
+                        }
+
+                        replyContainer.addView(replyView);
+                    }
                 }
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {}
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle error if needed
+            }
         });
     }
 
@@ -251,6 +288,7 @@ public class VisitorArtworkAdapter extends RecyclerView.Adapter<VisitorArtworkAd
             }
         });
     }
+
     private void fetchArtistName(String artistId, ViewHolder holder) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users").child(artistId);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -270,6 +308,7 @@ public class VisitorArtworkAdapter extends RecyclerView.Adapter<VisitorArtworkAd
             }
         });
     }
+
     private void loadCommentCount(String artworkId, ViewHolder holder) {
         DatabaseReference commentsRef = FirebaseDatabase.getInstance()
                 .getReference("artworkInteractions")
@@ -290,8 +329,7 @@ public class VisitorArtworkAdapter extends RecyclerView.Adapter<VisitorArtworkAd
         });
     }
 
-
-    private void addCommentToFirebase(String artworkId, String commentText, BottomSheetDialog dialog, ViewHolder holder, ViewGroup commentsContainer,EditText commentInput) {
+    private void addCommentToFirebase(String artworkId, String commentText, BottomSheetDialog dialog, ViewHolder holder, ViewGroup commentsContainer, EditText commentInput) {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         long timestamp = System.currentTimeMillis();
 
@@ -321,18 +359,14 @@ public class VisitorArtworkAdapter extends RecyclerView.Adapter<VisitorArtworkAd
         return artworkList.size();
     }
 
-
     public void updateList(List<Artwork> newList) {
         this.artworkList = newList;
         notifyDataSetChanged();
     }
 
-
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView artworkImage, likeIcon, commentIcon;
         TextView artworkTitle, artistName, likeCount, commentCount;
-
-
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -345,7 +379,4 @@ public class VisitorArtworkAdapter extends RecyclerView.Adapter<VisitorArtworkAd
             commentCount = itemView.findViewById(R.id.commentCount);
         }
     }
-
-
-
 }
